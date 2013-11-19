@@ -11,7 +11,7 @@ namespace GameLogic
     {
         void heartbeat()
         {
-            Debug.WriteLine(Data.FixedReferences.ShipType.SmallShip.Name);
+            //Debug.WriteLine(Data.FixedReferences.ShipType.SmallShip.Name);
         }
     }
 }
