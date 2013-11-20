@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using View.ScreenManagement;
 
@@ -58,49 +59,57 @@ namespace View.Controls
 
             if (Enabled)
             {
-
+                if (ContainsPos(new Vector2(input.MouseState.X, input.MouseState.Y)))
+                {
+                    if (input.MouseState.LeftButton == ButtonState.Released && Status == ButtonStatus.Down)
+                    {
+                        Status = ButtonStatus.Clicked;
+                        if (Clicked != null)
+                        {
+                            // Fire the clicked event.        
+                            Clicked(this, EventArgs.Empty);
+                        }
+                    }
+                    else if(input.MouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        Status = ButtonStatus.Down;
+                        if (Down != null)
+                        {
+                            Down(this, EventArgs.Empty);
+                        }
+                    }
+                }
+                else
+                {
+                    Status = ButtonStatus.Up;
+                }
+                /*
                 foreach (TouchLocation tl in input.TouchState)
                 {
-
                     if (ContainsPos(tl.Position))
                     {
-
                         if (tl.State == TouchLocationState.Pressed)
                         {
-
                             Status = ButtonStatus.Clicked;
 
                             if (Clicked != null)
                             {
-
                                 // Fire the clicked event.        
-
                                 Clicked(this, EventArgs.Empty);
-
                             }
-
                         }
-
                         else
                         {
-
                             Status = ButtonStatus.Down;
 
                             if (Down != null)
                             {
-
                                 // Fire the pressed down event.        
-
                                 Down(this, EventArgs.Empty);
-
                             }
-
                         }
-
                     }
-
-                }
-
+                }*/
             }
 
         }
@@ -124,16 +133,12 @@ namespace View.Controls
                 {
 
                     spriteBatch.Draw(touchOverlay, bounds, Color);
-
                 }
 
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, bounds, Text, Color);
                 }
-
-                Status = ButtonStatus.Up;
-
             }
 
         }

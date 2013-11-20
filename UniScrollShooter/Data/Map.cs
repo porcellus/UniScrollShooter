@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data
 {
-    class Map
+    public class Map
     {
     }
 }

@@ -21,7 +21,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 namespace View.ScreenManagement
 {
     /// <summary>
-    /// The screen manager is a component which manages one or more GameScreen
+    /// The screen manager is a component which manages one or more Screen
     /// instances. It maintains a stack of screens, calls their Update and Draw
     /// methods at the appropriate times, and automatically routes input to the
     /// topmost active screen.
@@ -30,8 +30,8 @@ namespace View.ScreenManagement
     {
         #region Fields
 
-        List<GameScreen> screens = new List<GameScreen>();
-        List<GameScreen> screensToUpdate = new List<GameScreen>();
+        List<Screen> screens = new List<Screen>();
+        List<Screen> screensToUpdate = new List<Screen>();
 
         InputState input = new InputState();
 
@@ -121,7 +121,7 @@ namespace View.ScreenManagement
             blankTexture = content.Load<Texture2D>("blank");
 
             // Tell each of the screens to load their content.
-            foreach (GameScreen screen in screens)
+            foreach (Screen screen in screens)
             {
                 screen.LoadContent();
             }
@@ -134,7 +134,7 @@ namespace View.ScreenManagement
         protected override void UnloadContent()
         {
             // Tell each of the screens to unload their content.
-            foreach (GameScreen screen in screens)
+            foreach (Screen screen in screens)
             {
                 screen.UnloadContent();
             }
@@ -158,7 +158,7 @@ namespace View.ScreenManagement
             // the process of updating one screen adds or removes others.
             screensToUpdate.Clear();
 
-            foreach (GameScreen screen in screens)
+            foreach (Screen screen in screens)
                 screensToUpdate.Add(screen);
 
             bool otherScreenHasFocus = !Game.IsActive;
@@ -168,7 +168,7 @@ namespace View.ScreenManagement
             while (screensToUpdate.Count > 0)
             {
                 // Pop the topmost screen off the waiting list.
-                GameScreen screen = screensToUpdate[screensToUpdate.Count - 1];
+                Screen screen = screensToUpdate[screensToUpdate.Count - 1];
 
                 screensToUpdate.RemoveAt(screensToUpdate.Count - 1);
 
@@ -207,7 +207,7 @@ namespace View.ScreenManagement
         {
             List<string> screenNames = new List<string>();
 
-            foreach (GameScreen screen in screens)
+            foreach (Screen screen in screens)
                 screenNames.Add(screen.GetType().Name);
 
             Debug.WriteLine(string.Join(", ", screenNames.ToArray()));
@@ -219,7 +219,7 @@ namespace View.ScreenManagement
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameScreen screen in screens)
+            foreach (Screen screen in screens)
             {
                 if (screen.ScreenState == ScreenState.Hidden)
                     continue;
@@ -237,7 +237,7 @@ namespace View.ScreenManagement
         /// <summary>
         /// Adds a new screen to the screen manager.
         /// </summary>
-        public void AddScreen(GameScreen screen, PlayerIndex? controllingPlayer)
+        public void AddScreen(Screen screen, PlayerIndex? controllingPlayer)
         {
             screen.ControllingPlayer = controllingPlayer;
             screen.ScreenManager = this;
@@ -258,11 +258,11 @@ namespace View.ScreenManagement
 
         /// <summary>
         /// Removes a screen from the screen manager. You should normally
-        /// use GameScreen.ExitScreen instead of calling this directly, so
+        /// use Screen.ExitScreen instead of calling this directly, so
         /// the screen can gradually transition off rather than just being
         /// instantly removed.
         /// </summary>
-        public void RemoveScreen(GameScreen screen)
+        public void RemoveScreen(Screen screen)
         {
             // If we have a graphics device, tell the screen to unload content.
             if (isInitialized)
@@ -287,7 +287,7 @@ namespace View.ScreenManagement
         /// than the real master list, because screens should only ever be added
         /// or removed using the AddScreen and RemoveScreen methods.
         /// </summary>
-        public GameScreen[] GetScreens()
+        public Screen[] GetScreens()
         {
             return screens.ToArray();
         }

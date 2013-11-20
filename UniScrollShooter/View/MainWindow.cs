@@ -28,12 +28,15 @@ namespace View
         // when they suddenly need to be loaded in the middle of a menu transition.
         static readonly string[] PreloadAssets =
         {
+            "blank", "button"
         };
 
         #endregion
 
         public MainWindow()
         {
+            IsMouseVisible = true;
+            Window.AllowUserResizing = true;
             Content.RootDirectory = "Content";
 
             _graphics = new GraphicsDeviceManager(this)
@@ -49,9 +52,7 @@ namespace View
 
             // Activate the first screens.
             _screenManager.AddScreen(new BackgroundScreen(), null);
-            /*
-            _screenManager.AddScreen();
-            */
+            _screenManager.AddScreen(new MainMenu(), null);
         }
 
         #region Content Load-Unload

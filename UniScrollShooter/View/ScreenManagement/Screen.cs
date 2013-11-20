@@ -1,6 +1,6 @@
 #region File Description
 //-----------------------------------------------------------------------------
-// GameScreen.cs
+// Screen.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -36,7 +36,7 @@ namespace View.ScreenManagement
     /// want to quit" message box, and the main game itself are all implemented
     /// as screens.
     /// </summary>
-    public abstract class GameScreen
+    public abstract class Screen
     {
         #region Properties
 

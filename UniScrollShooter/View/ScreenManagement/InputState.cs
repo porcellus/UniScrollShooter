@@ -39,6 +39,7 @@ namespace View.ScreenManagement
         public readonly bool[] GamePadWasConnected;
 
         public TouchCollection TouchState;
+        public MouseState MouseState;
 
         public readonly List<GestureSample> Gestures = new List<GestureSample>();
 
@@ -89,6 +90,8 @@ namespace View.ScreenManagement
             }
 
             TouchState = TouchPanel.GetState();
+
+            MouseState = Mouse.GetState();
 
             Gestures.Clear();
             while (TouchPanel.IsGestureAvailable)

@@ -19,7 +19,7 @@ namespace Data
         {
             try
             {
-                Map map;
+                Map map = new Map();
                 StreamReader reader = new StreamReader(name);
                 /*for (Int32 i = 0; i < 10; ++i)
                 {
@@ -31,7 +31,7 @@ namespace Data
             }
             catch
             {
-                throw new FileIOException;
+                throw new FileIOException();
             }
         }
     }

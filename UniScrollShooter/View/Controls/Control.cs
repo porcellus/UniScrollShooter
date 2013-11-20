@@ -104,7 +104,7 @@ namespace View.Controls
             color = Color.White;
         }
 
-        public virtual void Update(float elapsedTime)
+        public virtual void Update(double elapsedTime)
         {
         }
 

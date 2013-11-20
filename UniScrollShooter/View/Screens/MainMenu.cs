@@ -10,9 +10,12 @@
 #region Using Statements
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using View.Controls;
 using View.ScreenManagement;
 
 #endregion
@@ -24,12 +27,13 @@ namespace View.Screens
     /// It draws a background image that remains fixed in place regardless
     /// of whatever transitions the screens on top of it may be doing.
     /// </summary>
-    class BackgroundScreen : Screen
+    class MainMenu : Screen
     {
         #region Fields
 
         ContentManager _content;
-        Texture2D _backgroundTexture;
+
+        List<Control> _controls;
 
         #endregion
 
@@ -39,26 +43,34 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public BackgroundScreen()
+        public MainMenu()
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
+            _controls = new List<Control>();
         }
 
 
         /// <summary>
-        /// Loads graphics content for this screen. The background texture is quite
-        /// big, so we use our own local ContentManager to load it. This allows us
-        /// to unload before going from the menus into the game itself, wheras if we
-        /// used the shared ContentManager provided by the Game class, the content
-        /// would remain loaded forever.
+        /// Loads graphics content for this screen. 
         /// </summary>
         public override void LoadContent()
         {
-            if (_content == null)
+            if(_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _backgroundTexture = _content.Load<Texture2D>("background");
+            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
+            
+            var bg = _content.Load<Texture2D>("button");
+            var btn = new Controls.Button(bg, bg,
+                                          new Vector2(
+                                            fullscreen.Center.X - fullscreen.Width * 0.125f,
+                                            fullscreen.Center.Y - fullscreen.Height * 0.125f),
+                                          "GameMenu");
+            btn.Clicked += (sender, args) => { ScreenManager.RemoveScreen(this); ScreenManager.AddScreen(new GameMenu(), ControllingPlayer); };
+            btn.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btn);
         }
 
 
@@ -70,39 +82,30 @@ namespace View.Screens
             _content.Unload();
         }
 
-
         #endregion
 
         #region Update and Draw
 
-
         /// <summary>
-        /// Updates the background screen. Unlike most screens, this should not
-        /// transition off even if it has been covered by another screen: it is
-        /// supposed to be covered, after all! This overload forces the
-        /// coveredByOtherScreen parameter to false in order to stop the base
-        /// Update method wanting to transition off.
+        /// Handles input and passes it on to it's controls.
         /// </summary>
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+        public override void HandleInput(InputState input)
         {
-            base.Update(gameTime, otherScreenHasFocus, false);
+            base.HandleInput(input);
+
+            _controls.ForEach(a=> a.UpdateInput(input));
         }
 
-
         /// <summary>
-        /// Draws the background screen.
+        /// Draws the screen calling every controls Draw.
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
-            var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(_backgroundTexture, fullscreen,
-                             new Color(TransitionAlpha, TransitionAlpha, TransitionAlpha));
+            _controls.ForEach(a => a.Draw(spriteBatch));
 
             spriteBatch.End();
         }

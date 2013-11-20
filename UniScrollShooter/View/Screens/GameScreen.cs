@@ -10,9 +10,13 @@
 #region Using Statements
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using GameLogic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using View.Controls;
 using View.ScreenManagement;
 
 #endregion
@@ -24,12 +28,14 @@ namespace View.Screens
     /// It draws a background image that remains fixed in place regardless
     /// of whatever transitions the screens on top of it may be doing.
     /// </summary>
-    class BackgroundScreen : Screen
+    class GameScreen: Screen
     {
         #region Fields
 
         ContentManager _content;
-        Texture2D _backgroundTexture;
+
+        Texture2D _shipTexture;
+        GameLogic.Game _game;
 
         #endregion
 
@@ -39,7 +45,7 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public BackgroundScreen()
+        public GameScreen()
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
@@ -47,18 +53,20 @@ namespace View.Screens
 
 
         /// <summary>
-        /// Loads graphics content for this screen. The background texture is quite
-        /// big, so we use our own local ContentManager to load it. This allows us
-        /// to unload before going from the menus into the game itself, wheras if we
-        /// used the shared ContentManager provided by the Game class, the content
-        /// would remain loaded forever.
+        /// Loads graphics content for this screen. 
         /// </summary>
         public override void LoadContent()
         {
-            if (_content == null)
+            if(_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _backgroundTexture = _content.Load<Texture2D>("background");
+            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
+
+            _shipTexture = _content.Load<Texture2D>("spaceship");
+
+            _game = new GameLogic.Game();
+            _game.Start();
         }
 
 
@@ -70,39 +78,30 @@ namespace View.Screens
             _content.Unload();
         }
 
-
         #endregion
 
         #region Update and Draw
 
-
         /// <summary>
-        /// Updates the background screen. Unlike most screens, this should not
-        /// transition off even if it has been covered by another screen: it is
-        /// supposed to be covered, after all! This overload forces the
-        /// coveredByOtherScreen parameter to false in order to stop the base
-        /// Update method wanting to transition off.
+        /// Handles input and passes it on to it's controls.
         /// </summary>
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+        public override void HandleInput(InputState input)
         {
-            base.Update(gameTime, otherScreenHasFocus, false);
+            base.HandleInput(input);
+
+            _game.Input = new Input {InputPos = new Vector2(input.MouseState.X, input.MouseState.Y)};
         }
 
-
         /// <summary>
-        /// Draws the background screen.
+        /// Draws the screen calling every controls Draw.
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
-            var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
             spriteBatch.Begin();
-
-            spriteBatch.Draw(_backgroundTexture, fullscreen,
-                             new Color(TransitionAlpha, TransitionAlpha, TransitionAlpha));
+            var shipCenter = new Vector2(_shipTexture.Width / 2, _shipTexture.Height / 2);
+            spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
 
             spriteBatch.End();
         }
