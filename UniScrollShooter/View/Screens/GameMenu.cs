@@ -62,24 +62,34 @@ namespace View.Screens
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
             
-            var bg = _content.Load<Texture2D>("button");
+            var button_off_bg = _content.Load<Texture2D>("button_off");
+            var button_on_bg = _content.Load<Texture2D>("button_on");
+            int width = button_off_bg.Width / 2;
+            int height = button_off_bg.Height / 2;
+            int shift = height * 2 + 10;
             var blank = _content.Load<Texture2D>("blank");
 
-            var btn1 = new Controls.Button(bg, bg,
+            var btn1 = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
-                                            fullscreen.Center.X - fullscreen.Width * 0.125f,
-                                            fullscreen.Center.Y - fullscreen.Height * 0.125f),
-                                          "Game");
-            btn1.Clicked += (sender, args) => { ScreenManager.RemoveScreen(this); ScreenManager.AddScreen(new GameScreen(), ControllingPlayer); };
+                                            fullscreen.Center.X - width,
+                                            fullscreen.Center.Y - height),
+                                          "START GAME");
+            btn1.Clicked += (sender, args) => { 
+                ScreenManager.RemoveScreen(this); 
+                ScreenManager.AddScreen(new GameScreen(), ControllingPlayer); 
+            };
             btn1.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btn1);
 
-            var btn2 = new Controls.Button(bg, bg,
+            var btn2 = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
-                                            fullscreen.Center.X - fullscreen.Width * 0.125f,
-                                            fullscreen.Center.Y + fullscreen.Height * 0.125f),
-                                          "Back");
-            btn2.Clicked += (sender, args) => { ScreenManager.RemoveScreen(this); ScreenManager.AddScreen(new MainMenu(), ControllingPlayer); };
+                                            fullscreen.Center.X - width,
+                                            fullscreen.Center.Y - height + shift),
+                                          "BACK TO MAIN MENU");
+            btn2.Clicked += (sender, args) => {
+                ScreenManager.RemoveScreen(this); 
+                ScreenManager.AddScreen(new MainMenu(), ControllingPlayer); 
+            };
             btn2.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btn2);
         }

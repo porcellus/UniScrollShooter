@@ -28,7 +28,7 @@ namespace View
         // when they suddenly need to be loaded in the middle of a menu transition.
         static readonly string[] PreloadAssets =
         {
-            "blank", "button"
+            "blank", "button_off", "button_on"
         };
 
         #endregion
@@ -39,11 +39,10 @@ namespace View
             Window.AllowUserResizing = true;
             Content.RootDirectory = "Content";
 
-            _graphics = new GraphicsDeviceManager(this)
-                {
-                    PreferredBackBufferWidth = 853,
-                    PreferredBackBufferHeight = 480
-                };
+            _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.IsFullScreen = true;
 
             // Create the screen manager component.
             _screenManager = new ScreenManager(this);
@@ -87,7 +86,11 @@ namespace View
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                Exit();
+
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
+                Exit();
 
             // TODO: Add your update logic here
 

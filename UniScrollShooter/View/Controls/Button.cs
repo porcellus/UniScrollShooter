@@ -12,12 +12,13 @@ namespace View.Controls
 {
     class Button : Control
     {
-        public enum ButtonStatus { Up, Down, Clicked}
+        public enum ButtonStatus { Up, Down}
         #region Fields
-        Texture2D texture;
-        Texture2D touchOverlay;
+        Texture2D texture_on;
+        Texture2D texture_off;
         Rectangle bounds;
-        ButtonStatus _status = ButtonStatus.Up;
+        ButtonStatus _status;
+        MouseState _state;
         #endregion
 
         public ButtonStatus Status
@@ -25,37 +26,35 @@ namespace View.Controls
             get { return _status; }
             set { _status = value; }
         }
-        // Gets fired when the button is clicked or down
 
+        // Gets fired when the button is clicked.
         public event EventHandler Clicked;
 
-        public event EventHandler Down;
         public new Vector2 Position
         {
-
             get { return base.Position; }
 
             set
             {
-
                 base.Position = value;
-
-                bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, texture.Width, texture.Height);
-
+                
+                bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, texture_off.Width, texture_off.Height);
             }
         }
 
-        public Button(Texture2D texture, Texture2D touchedOverlay, Vector2 position, string text): base(position)
+        public Button(Texture2D texture_on, Texture2D texture_off, Vector2 position, string text) : base(position)
         {
             base.Text = text;
-            this.texture = texture;
-            this.touchOverlay = touchedOverlay;
+            this.texture_on = texture_on;
+            this.texture_off = texture_off;
+            this.Status = ButtonStatus.Up;
 
-            bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            bounds = new Rectangle((int)position.X, (int)position.Y, texture_off.Width, texture_off.Height);
         }
 
         public override void UpdateInput(InputState input)
         {
+            _state = input.MouseState;
 
             if (Enabled)
             {
@@ -63,76 +62,40 @@ namespace View.Controls
                 {
                     if (input.MouseState.LeftButton == ButtonState.Released && Status == ButtonStatus.Down)
                     {
-                        Status = ButtonStatus.Clicked;
                         if (Clicked != null)
                         {
                             // Fire the clicked event.        
                             Clicked(this, EventArgs.Empty);
                         }
                     }
-                    else if(input.MouseState.LeftButton == ButtonState.Pressed)
+                    else if (input.MouseState.LeftButton == ButtonState.Pressed)
                     {
                         Status = ButtonStatus.Down;
-                        if (Down != null)
-                        {
-                            Down(this, EventArgs.Empty);
-                        }
                     }
                 }
                 else
                 {
                     Status = ButtonStatus.Up;
                 }
-                /*
-                foreach (TouchLocation tl in input.TouchState)
-                {
-                    if (ContainsPos(tl.Position))
-                    {
-                        if (tl.State == TouchLocationState.Pressed)
-                        {
-                            Status = ButtonStatus.Clicked;
-
-                            if (Clicked != null)
-                            {
-                                // Fire the clicked event.        
-                                Clicked(this, EventArgs.Empty);
-                            }
-                        }
-                        else
-                        {
-                            Status = ButtonStatus.Down;
-
-                            if (Down != null)
-                            {
-                                // Fire the pressed down event.        
-                                Down(this, EventArgs.Empty);
-                            }
-                        }
-                    }
-                }*/
             }
-
         }
 
         protected bool ContainsPos(Vector2 pos)
         {
-
             return bounds.Contains((int)pos.X, (int)pos.Y);
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
             if (Enabled)
             {
-
-                spriteBatch.Draw(texture, bounds, Color);
-
-                if (Status == ButtonStatus.Down)
+                if (ContainsPos(new Vector2(_state.X, _state.Y)))
                 {
-
-                    spriteBatch.Draw(touchOverlay, bounds, Color);
+                    spriteBatch.Draw(texture_on, bounds, Color);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture_off, bounds, Color);
                 }
 
                 if (Font != null)
@@ -142,10 +105,14 @@ namespace View.Controls
             }
 
         }
+
         public static void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
-            var topLeft = new Vector2(rectangle.Center.X, rectangle.Center.Y - size.Y * 0.5f);
+            var textWidth = text.Count() * 17;
+            var left = rectangle.Left + (rectangle.Width - textWidth) / 2;
+            var top = rectangle.Top + 20;
+            var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
         }
     }

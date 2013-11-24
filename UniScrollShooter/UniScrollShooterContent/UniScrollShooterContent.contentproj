@@ -63,15 +63,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="button.jpg">
-      <Name>button</Name>
+    <Compile Include="spaceship.png">
+      <Name>spaceship</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="spaceship.png">
-      <Name>spaceship</Name>
+    <Compile Include="button_off.png">
+      <Name>button_off</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="button_on.png">
+      <Name>button_on</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

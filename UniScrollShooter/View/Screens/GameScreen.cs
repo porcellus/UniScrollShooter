@@ -66,7 +66,7 @@ namespace View.Screens
             _shipTexture = _content.Load<Texture2D>("spaceship");
 
             _game = new GameLogic.Game();
-            _game.Start();
+            _game.Start();           
         }
 
 
@@ -105,7 +105,6 @@ namespace View.Screens
 
             spriteBatch.End();
         }
-
 
         #endregion
     }

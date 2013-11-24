@@ -62,15 +62,38 @@ namespace View.Screens
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
             
-            var bg = _content.Load<Texture2D>("button");
-            var btn = new Controls.Button(bg, bg,
+            var button_off_bg = _content.Load<Texture2D>("button_off");
+            var button_on_bg = _content.Load<Texture2D>("button_on");
+            int width = button_off_bg.Width / 2;
+            int height = button_off_bg.Height / 2;
+            int shift = height * 2 + 10;
+
+            // Adding the GAME MENU button to the main menu.
+            var btnGameMenu = new Controls.Button(button_on_bg, button_off_bg, 
                                           new Vector2(
-                                            fullscreen.Center.X - fullscreen.Width * 0.125f,
-                                            fullscreen.Center.Y - fullscreen.Height * 0.125f),
-                                          "GameMenu");
-            btn.Clicked += (sender, args) => { ScreenManager.RemoveScreen(this); ScreenManager.AddScreen(new GameMenu(), ControllingPlayer); };
-            btn.Font = _content.Load<SpriteFont>("menufont");
-            _controls.Add(btn);
+                                            fullscreen.Center.X - width,
+                                            fullscreen.Center.Y - height),
+                                          "GAME MENU");
+            btnGameMenu.Clicked += (sender, args) =>
+            { 
+                ScreenManager.RemoveScreen(this); 
+                ScreenManager.AddScreen(new GameMenu(), ControllingPlayer); 
+            };
+            btnGameMenu.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btnGameMenu);
+
+            // Adding the EXIT button to the main menu.
+            var btnExit = new Controls.Button(button_on_bg, button_off_bg,
+                                          new Vector2(
+                                            fullscreen.Center.X - width,
+                                            fullscreen.Center.Y - height + shift),
+                                          "EXIT");
+            btnExit.Clicked += (sender, args) =>
+            {
+                ScreenManager.Game.Exit();
+            };
+            btnExit.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btnExit);
         }
 
 
