@@ -10,7 +10,6 @@ namespace Data.FixedReferences
     /// </summary>
     public class ShipType
     {
-        //remélem erre gondoltál
         private static ShipType _smallShip;
         private static ShipType _mediumShip;
         private static ShipType _bigShip;
@@ -28,27 +27,13 @@ namespace Data.FixedReferences
             get { return _bigShip ?? (_bigShip = new ShipType("nagy", 8)); }
         }
         public String Name { get; set; }
-        public Int32 Power { get; set; }
+        public Int32 Speed { get; set; }
 
-        private ShipType(String name, Int32 power)
+        private ShipType(String name, Int32 speed)
         {
             Name = name;
-            Power = power;
+            Speed = speed;
         }
-    }
-
-    public class BossType
-    {
-        private static BossType _instance;
-        public static BossType Instance()
-        {
-            if(_instance==null)
-                _instance = new BossType();
-            return _instance;
-        }
-
-        private BossType() {}
-
     }
 
 }

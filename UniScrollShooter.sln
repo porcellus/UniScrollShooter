@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "UniScrollShooterContent", "UniScrollShooter\UniScrollShooterContent\UniScrollShooterContent.contentproj", "{D736EB5F-4E3F-497A-A02A-751DFEA4AE38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScrollShooterContent", "UniScrollShooter\UniScrollShooterContent\UniScrollShooterContent.contentproj", "{D736EB5F-4E3F-497A-A02A-751DFEA4AE38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "UniScrollShooter\View\View.csproj", "{CE80A918-4055-4E30-A6C5-33F605DF154B}"
 EndProject

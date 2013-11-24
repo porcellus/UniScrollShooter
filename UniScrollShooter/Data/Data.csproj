@@ -35,7 +35,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Enemy.cs" />
     <Compile Include="FileManager.cs" />
+    <Compile Include="FixedReferences\EnemyType.cs" />
     <Compile Include="FixedReferences\ShipType.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Pilot.cs" />
