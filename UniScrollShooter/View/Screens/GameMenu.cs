@@ -118,7 +118,7 @@ namespace View.Screens
 
             _controls.ForEach(a=> a.UpdateInput(input));
         }
-
+        
         /// <summary>
         /// Draws the screen calling every controls Draw.
         /// </summary>

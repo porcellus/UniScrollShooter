@@ -13,6 +13,8 @@ namespace GameLogic
     public struct Input
     {
         public Vector2 InputPos;
+
+        public bool FirePressed { get; set; }
     }
 
     public class Game: IDisposable
@@ -22,6 +24,7 @@ namespace GameLogic
         private Pilot _pilot;
         public List<Enemy> enemies;
         public List<Bullet> bullets;
+        private int cooldown; // nem itt kene legyen
 
         //TODO(nektek): kellene, hogy megkapjam startban paramétereknél a spritek méretét
         //TODO: pálya létrehozása kezelése(majd)
@@ -33,6 +36,8 @@ namespace GameLogic
 
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
+
+            cooldown = 0;
 
             var t = new Timer(Heartbeat, null, 0, 10);
             var nState = new GameState {PlayerPosition = new Vector2(5,20)};
@@ -49,6 +54,12 @@ namespace GameLogic
                 {
                     PlayerPosition = new Vector2(CurrState.PlayerPosition.X + dx, CurrState.PlayerPosition.Y + dy),
                 };
+            if(cooldown>0)--cooldown;
+            else if (Input.FirePressed)
+            {
+                CreateNewBullet();
+                cooldown = 25;
+            }
             CurrState = nState;
 
             _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
@@ -150,7 +161,7 @@ namespace GameLogic
         public void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.ship.posX + _pilot.ship.width, _pilot.ship.posY + _pilot.ship.height/2, 20, 20, _pilot.ship.damage));
+            bullets.Add(new Bullet(_pilot.ship.posX + _pilot.ship.width, _pilot.ship.posY + _pilot.ship.height/2f, 20, 20, _pilot.ship.damage));
         }
 
         //új ellenség

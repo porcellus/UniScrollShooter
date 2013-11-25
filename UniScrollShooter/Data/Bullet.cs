@@ -16,7 +16,7 @@ namespace Data
             damage = damage_;
             active = true;
 
-            vx = 0; vy = 1;
+            vx = 1; vy = 0;
             speed = 20f;
         }
 
