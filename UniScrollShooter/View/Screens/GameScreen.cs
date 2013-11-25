@@ -80,7 +80,7 @@ namespace View.Screens
             var rnd = new Random();
             for (int i = 0; i < 100; ++i)
                 _stars.Add(new Vector2(rnd.Next(0, 125) / 100f, rnd.Next(0, 100) / 100f));
-            _game.Start();
+            _game.Start();           
         }
 
 
