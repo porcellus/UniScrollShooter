@@ -8,14 +8,16 @@ namespace Data
 {
     public class Enemy
     {
-        public Enemy(int kind, Double x, Double y, Int32 w, Int32 h)
+        public Enemy(int kind_, Double x, Double y, Int32 widht_, Int32 height_)
         {
             health = 100;
-            PosX = x;
-            PosY = y;
-            Width = w;
-            Height = h;
-            switch (kind)
+            posX = x;
+            posY = y;
+            width = widht_;
+            height = height_;
+            vx = -1;
+            vy = 0;
+            switch (kind_)
             {
                 case 0:
                     {
@@ -36,20 +38,20 @@ namespace Data
         }
 
         public Double health { get; set; }
-        public Double PosX { get; set; }
-        public Double PosY { get; set; }
-        public Int32 Width { get; set; }
-        public Int32 Height { get; set; }
+        public Double posX { get; set; }
+        public Double posY { get; set; }
+        public Int32 width { get; set; }
+        public Int32 height { get; set; }
         //irányvektor
-        private Double vx = 0.5;
-        private Double vy = 1.5;
+        private Double vx;
+        private Double vy;
 
         public EnemyType type;
 
         public void Move()
         {
-            PosX += type.Speed * vx;
-            PosX += type.Speed * vy;
+            posX += type.speed * vx;
+            posX += type.speed * vy;
         }
     }
 }

@@ -11,13 +11,14 @@ namespace Data
     /// </summary>
     public class Ship
     {
-        public Ship(Int32 w, Int32 h)
+        public Ship(Int32 widht_, Int32 height_)
         {
             health = 100;
             shield = 100;
             type = ShipType.BigShip;
-            width = w;
-            height = h;
+            width = widht_;
+            height = height_;
+            damage = type.basedamage;
             //Modules = new List<Module>();
         }
 
@@ -45,6 +46,7 @@ namespace Data
 
         public Int32 health { get; set; }
         public Int32 shield { get; set; }
+        public Int32 damage { get; set; }
 
         public ShipType type { get; set; }
         public Double posX { get; set; }

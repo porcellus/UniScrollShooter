@@ -25,15 +25,15 @@ namespace Data.FixedReferences
             get { return _big ?? (_big = new EnemyType(3, 25, 30)); }
         }
 
-        public Double Speed { get; set; }
-        public Int32 Damage { get; set; }
-        public Int32 Value { get; set; }
+        public Double speed { get; private set; }
+        public Int32 damage { get; private set; }
+        public Int32 value { get; private set; }
 
-        private EnemyType(Double speed, Int32 damage, Int32 value)
+        private EnemyType(Double speed_, Int32 damage_, Int32 value_)
         {
-            Speed = speed;
-            Damage = damage;
-            Value = value;
+            speed = speed_;
+            damage = damage_;
+            value = value_;
         }
     }
 }

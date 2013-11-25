@@ -35,6 +35,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bullet.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="FixedReferences\EnemyType.cs" />
