@@ -42,7 +42,6 @@ namespace View
             _graphics = new GraphicsDeviceManager(this);
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
-            _graphics.IsFullScreen = true;
 
             // Create the screen manager component.
             _screenManager = new ScreenManager(this);
@@ -52,6 +51,11 @@ namespace View
             // Activate the first screens.
             _screenManager.AddScreen(new BackgroundScreen(), null);
             _screenManager.AddScreen(new MainMenu(), null);
+        }
+
+        public void ToggleFullscreen()
+        {
+            _graphics.ToggleFullScreen();
         }
 
         #region Content Load-Unload
@@ -85,15 +89,6 @@ namespace View
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                Exit();
-
-            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 

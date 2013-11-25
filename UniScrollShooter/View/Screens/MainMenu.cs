@@ -83,10 +83,23 @@ namespace View.Screens
             _controls.Add(btnGameMenu);
 
             // Adding the EXIT button to the main menu.
-            var btnExit = new Controls.Button(button_on_bg, button_off_bg,
+            var btnFullscreen = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
                                             fullscreen.Center.X - width,
                                             fullscreen.Center.Y - height + shift),
+                                          "Toggle fullscreen");
+            btnFullscreen.Clicked += (sender, args) =>
+            {
+                ((MainWindow)ScreenManager.Game).ToggleFullscreen();
+            };
+            btnFullscreen.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btnFullscreen);
+
+            // Adding the EXIT button to the main menu.
+            var btnExit = new Controls.Button(button_on_bg, button_off_bg,
+                                          new Vector2(
+                                            fullscreen.Center.X - width,
+                                            fullscreen.Center.Y - height + 2*shift),
                                           "EXIT");
             btnExit.Clicked += (sender, args) =>
             {

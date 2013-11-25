@@ -121,12 +121,26 @@ namespace View.Screens
         {
             base.HandleInput(input);
 
-            _game.Input = 
+            _game.Input =
                 new Input
-                    {   InputPos = new Vector2(input.MouseState.X, input.MouseState.Y)
-                    //,   ExitButtonPressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.Escape) && !input.LastKeyboardStates[0].IsKeyDown(Keys.Escape)
-                    //,   PauseToggePressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.P) && !input.LastKeyboardStates[0].IsKeyDown(Keys.P)
-                    };
+                {
+                    InputPos = new Vector2(input.MouseState.X, input.MouseState.Y),
+                };
+            if (input.CurrentKeyboardStates[0].IsKeyDown(Keys.P) &&
+                !input.LastKeyboardStates[0].IsKeyDown(Keys.P))
+            {
+                //_game.TogglePause();
+            }
+
+            if (input.CurrentKeyboardStates[0].IsKeyDown(Keys.Escape) &&
+                !input.LastKeyboardStates[0].IsKeyDown(Keys.Escape))
+            {
+                //_game.Stop();
+                _game.Dispose();
+                ScreenManager.RemoveScreen(this);
+                ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
+            }
+
         }
 
         /// <summary>

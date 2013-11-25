@@ -15,7 +15,7 @@ namespace GameLogic
         public Vector2 InputPos;
     }
 
-    public class Game
+    public class Game: IDisposable
     {
         public GameState CurrState { get; private set; }
         public Input Input { get; set; }
@@ -161,5 +161,9 @@ namespace GameLogic
         }
         #endregion
 
+        public void Dispose()
+        {
+            ;
+        }
     }
 }

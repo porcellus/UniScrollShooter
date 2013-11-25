@@ -89,27 +89,20 @@ namespace View.Controls
         {
             if (Enabled)
             {
-                if (ContainsPos(new Vector2(_state.X, _state.Y)))
-                {
-                    spriteBatch.Draw(texture_on, bounds, Color);
-                }
-                else
-                {
-                    spriteBatch.Draw(texture_off, bounds, Color);
-                }
+                spriteBatch.Draw(ContainsPos(new Vector2(_state.X, _state.Y)) ? texture_on : texture_off, bounds, Color);
 
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, bounds, Text, Color);
                 }
             }
-
         }
 
         public static void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
-            var textWidth = text.Count() * 17;
+            //var textWidth = text.Count() * 17; Nem kozepen volt. igy igen.
+            var textWidth = size.X;
             var left = rectangle.Left + (rectangle.Width - textWidth) / 2;
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
