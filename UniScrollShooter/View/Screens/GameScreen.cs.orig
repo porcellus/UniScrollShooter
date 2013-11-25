@@ -70,17 +70,21 @@ namespace View.Screens
             _shipTexture = _content.Load<Texture2D>("spaceship");
             _starTexture = _content.Load<Texture2D>("star1");
 
-            _game = new GameLogic.Game();/*
+            _game = new GameLogic.Game();
+<<<<<<< HEAD
             _game.GameEnded += (sender, args) =>
                 {
                     ScreenManager.RemoveScreen(this);
                     ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
-                };*/
+                };
 
             var rnd = new Random();
             for (int i = 0; i < 100; ++i)
                 _stars.Add(new Vector2(rnd.Next(0, 125) / 100f, rnd.Next(0, 100) / 100f));
+            _game.Start();
+=======
             _game.Start();           
+>>>>>>> de11607ca7c6900b34510e6c5b88cc12e23436a3
         }
 
 
@@ -124,8 +128,8 @@ namespace View.Screens
             _game.Input = 
                 new Input
                     {   InputPos = new Vector2(input.MouseState.X, input.MouseState.Y)
-                    //,   ExitButtonPressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.Escape) && !input.LastKeyboardStates[0].IsKeyDown(Keys.Escape)
-                    //,   PauseToggePressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.P) && !input.LastKeyboardStates[0].IsKeyDown(Keys.P)
+                    ,   ExitButtonPressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.Escape) && !input.LastKeyboardStates[0].IsKeyDown(Keys.Escape)
+                    ,   PauseToggePressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.P) && !input.LastKeyboardStates[0].IsKeyDown(Keys.P)
                     };
         }
 
