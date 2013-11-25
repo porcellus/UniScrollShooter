@@ -118,7 +118,9 @@
     <Compile Include="Screens\BackgroundScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\GameMenu.cs" />
+    <Compile Include="Screens\HighscoreScreen.cs" />
     <Compile Include="Screens\MainMenu.cs" />
+    <Compile Include="Screens\OptionsScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

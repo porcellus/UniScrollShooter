@@ -64,15 +64,18 @@ namespace View.Screens
             
             var button_off_bg = _content.Load<Texture2D>("button_off");
             var button_on_bg = _content.Load<Texture2D>("button_on");
+            
             int width = button_off_bg.Width / 2;
             int height = button_off_bg.Height / 2;
             int shift = height * 2 + 10;
+            int topleftX = fullscreen.Center.X - width;
+            int topleftY = fullscreen.Center.Y - 100 - height;
 
             // Adding the GAME MENU button to the main menu.
             var btnGameMenu = new Controls.Button(button_on_bg, button_off_bg, 
                                           new Vector2(
-                                            fullscreen.Center.X - width,
-                                            fullscreen.Center.Y - height),
+                                            topleftX,
+                                            topleftY),
                                           "GAME MENU");
             btnGameMenu.Clicked += (sender, args) =>
             { 
@@ -82,12 +85,12 @@ namespace View.Screens
             btnGameMenu.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnGameMenu);
 
-            // Adding the EXIT button to the main menu.
+            // Adding the TOGGLE FULLSCREEN button to the main menu.
             var btnFullscreen = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
-                                            fullscreen.Center.X - width,
-                                            fullscreen.Center.Y - height + shift),
-                                          "Toggle fullscreen");
+                                            topleftX,
+                                            topleftY + shift),
+                                          "TOGGLE FULLSCREEN");
             btnFullscreen.Clicked += (sender, args) =>
             {
                 ((MainWindow)ScreenManager.Game).ToggleFullscreen();
@@ -95,11 +98,39 @@ namespace View.Screens
             btnFullscreen.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnFullscreen);
 
+            // Adding the OPTIONS button to the main menu.
+            var btnOptions = new Controls.Button(button_on_bg, button_off_bg,
+                                          new Vector2(
+                                            topleftX,
+                                            topleftY + shift * 2),
+                                          "OPTIONS");
+            btnOptions.Clicked += (sender, args) =>
+            {
+                ScreenManager.RemoveScreen(this);
+                ScreenManager.AddScreen(new OptionsScreen(), ControllingPlayer);
+            };
+            btnOptions.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btnOptions);
+
+            // Adding the HIGHSCORES button to the main menu.
+            var btnHighscores = new Controls.Button(button_on_bg, button_off_bg,
+                                          new Vector2(
+                                            topleftX,
+                                            topleftY + shift * 3),
+                                          "HIGHSCORES");
+            btnHighscores.Clicked += (sender, args) =>
+            {
+                ScreenManager.RemoveScreen(this);
+                ScreenManager.AddScreen(new HighscoreScreen(), ControllingPlayer);
+            };
+            btnHighscores.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(btnHighscores);
+
             // Adding the EXIT button to the main menu.
             var btnExit = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
-                                            fullscreen.Center.X - width,
-                                            fullscreen.Center.Y - height + 2*shift),
+                                            topleftX,
+                                            topleftY + shift * 4),
                                           "EXIT");
             btnExit.Clicked += (sender, args) =>
             {
