@@ -43,7 +43,7 @@ namespace GameLogic
         public void Start()
         {
             _pilot = new Pilot();
-            _pilot.Init(10.0, 10.0, 172, 108);
+            _pilot.Init(10.0, 10.0, 172, 54);
 
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
@@ -92,7 +92,7 @@ namespace GameLogic
 
                     _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
 
-                    if (_rnd.Next(0, 1000) > 990 && enemies.Count < 10)
+                    if (_rnd.Next(0, 100000) == 1 && enemies.Count(enemy => enemy.posX > 1500) < 10)
                     {
                         CreateNewEnemy();
                     }
