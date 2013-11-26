@@ -15,7 +15,7 @@ namespace Data
             posY = y;
             width = widht_;
             height = height_;
-            vx = -1;
+            vx = -0.5;
             vy = 0;
             switch (kind_)
             {

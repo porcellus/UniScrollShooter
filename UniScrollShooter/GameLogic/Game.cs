@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Collections.Concurrent;
 using System.Threading;
 using Data.FixedReferences;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,11 @@ using Data;
 
 namespace GameLogic
 {
+    public enum GameEventType
+    {
+        LaserFired, EnemyDestroyed,
+    }
+
     public struct Input
     {
         public Vector2 InputPos;
@@ -24,23 +30,28 @@ namespace GameLogic
         private Pilot _pilot;
         public List<Enemy> enemies;
         public List<Bullet> bullets;
-        private int cooldown; // nem itt kene legyen
-
+        private int _cooldown; // nem itt kene legyen
+        private Random _rnd;
+        public ConcurrentQueue<GameEventType> Events { get; private set; }
+        
         //TODO(nektek): kellene, hogy megkapjam startban paramétereknél a spritek méretét
         //TODO: pálya létrehozása kezelése(majd)
 
         public void Start()
         {
             _pilot = new Pilot();
-            _pilot.Init(10.0, 10.0, 50, 100);
+            _pilot.Init(10.0, 10.0, 172, 108);
 
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
 
-            cooldown = 0;
+            _cooldown = 0;
+            _rnd = new Random();
 
             var t = new Timer(Heartbeat, null, 0, 10);
             var nState = new GameState {PlayerPosition = new Vector2(5,20)};
+
+            Events = new ConcurrentQueue<GameEventType>();
 
             CurrState = nState;
         }
@@ -54,31 +65,41 @@ namespace GameLogic
                 {
                     PlayerPosition = new Vector2(CurrState.PlayerPosition.X + dx, CurrState.PlayerPosition.Y + dy),
                 };
-            if(cooldown>0)--cooldown;
+
+            if(_cooldown>0)--_cooldown;
             else if (Input.FirePressed)
             {
                 CreateNewBullet();
-                cooldown = 25;
+                Events.Enqueue(GameEventType.LaserFired);
+                _cooldown = 25;
             }
-            CurrState = nState;
 
             _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
-            Update();
+
+            if (_rnd.Next(0, 1000) > 990&& enemies.Count <10)
+            {
+                CreateNewEnemy();
+            }
+            Update(nState);
             CollisionCheck();
+
+            CurrState = nState;
         }
 
         #region Update
         /// <summary>
         /// Az ellenségek és lövedékek mozgatása, törlése, stb
         /// </summary>
-        public void Update()
+        public void Update(GameState nState)
         {
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
-                if (enemies[i].health<=0)
+                if (enemies[i].health <= 0)
+                {
                     enemies.RemoveAt(i);
-                else
-                   enemies[i].Move();
+                    Events.Enqueue(GameEventType.EnemyDestroyed);
+                } else
+                    enemies[i].Move();
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             for (int i = 0; i < bullets.Count; ++i)
@@ -161,14 +182,16 @@ namespace GameLogic
         public void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.ship.posX + _pilot.ship.width, _pilot.ship.posY + _pilot.ship.height/2f, 20, 20, _pilot.ship.damage));
+            bullets.Add(new Bullet(_pilot.ship.posX + _pilot.ship.width, _pilot.ship.posY + _pilot.ship.height / 2f, 65, 21, _pilot.ship.damage));
+            Events.Enqueue(GameEventType.LaserFired);
+
         }
 
         //új ellenség
         public void CreateNewEnemy()
         {
             //típus, koordináták, méretek
-            enemies.Add(new Enemy(0, 100, 100, 30, 20));
+            enemies.Add(new Enemy(0, 2000, _rnd.Next(100,700), 128, 61));
         }
         #endregion
 

@@ -15,6 +15,7 @@ using System.Diagnostics;
 using GameLogic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using View.Controls;
@@ -69,6 +70,7 @@ namespace View.Screens
 
             _shipTexture = _content.Load<Texture2D>("spaceship");
             _starTexture = _content.Load<Texture2D>("star1");
+            _content.Load<SoundEffect>("Sounds/laser");
 
             _game = new GameLogic.Game();/*
             _game.GameEnded += (sender, args) =>
@@ -141,7 +143,6 @@ namespace View.Screens
                 ScreenManager.RemoveScreen(this);
                 ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
             }
-
         }
 
         /// <summary>
@@ -158,22 +159,34 @@ namespace View.Screens
             var enemySp = _content.Load<Texture2D>("enemy_spaceship");
             var lsRedSp = _content.Load<Texture2D>("laserbeam_red");
             var lsBlueSp = _content.Load<Texture2D>("laserbeam_blue");
-            spriteBatch.Draw(blankSp, fullscreen, Color.Black);
+            //spriteBatch.Draw(blankSp, fullscreen, Color.Black);
 
             foreach (var star in _stars)
-            {
-                spriteBatch.Draw(_starTexture, new Vector2(star.X * fullscreen.Width, star.Y * fullscreen.Height), Color.White);
-            }
+                spriteBatch.Draw(_starTexture, new Vector2(star.X*fullscreen.Width, star.Y*fullscreen.Height),
+                                 Color.White);
 
             foreach (var enemy in _game.enemies)
-            {
-                spriteBatch.Draw(enemySp,new Vector2((float) enemy.posX,(float) enemy.posY), Color.White );
-            }
+                spriteBatch.Draw(enemySp, new Vector2((float) enemy.posX, (float) enemy.posY), Color.White);
 
             foreach (var bullet in _game.bullets)
+                spriteBatch.Draw(lsRedSp, new Vector2((float) bullet.posX, (float) bullet.posY), lsRedSp.Bounds,
+                                 Color.White,
+                                 bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0, new Vector2(0, 0), 1,
+                                 SpriteEffects.None, 0f);
+            GameEventType ev;
+            while (_game.Events.TryDequeue(out ev))
             {
-                spriteBatch.Draw(lsRedSp, new Vector2((float)bullet.posX, (float) bullet.posY), lsRedSp.Bounds, Color.White, bullet.vy > 0? (float) bullet.vx / (float) bullet.vy : 0, new Vector2(0,0), 1, SpriteEffects.None, 0f);
+                switch (ev)
+                {
+                    case GameEventType.LaserFired:
+                        _content.Load<SoundEffect>("Sounds/laser").Play();
+                        break;
+                    case GameEventType.EnemyDestroyed:
+                        _content.Load<SoundEffect>("Sounds/explosion_small").Play();
+                        break;
+                }
             }
+
             var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
             spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
 
