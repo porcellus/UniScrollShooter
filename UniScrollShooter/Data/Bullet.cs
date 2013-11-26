@@ -20,10 +20,10 @@ namespace Data
             speed = 20f;
         }
 
-        public void Move()
+        public void Move(double elapsedTime)
         {
-            posX += vx*speed;
-            posY += vy*speed;
+            posX += vx * speed * elapsedTime / 20;
+            posY += vy * speed * elapsedTime / 20;
         }
 
         public Int32 damage;

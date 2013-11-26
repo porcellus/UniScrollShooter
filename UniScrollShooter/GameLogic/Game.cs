@@ -30,8 +30,11 @@ namespace GameLogic
         private Pilot _pilot;
         public List<Enemy> enemies;
         public List<Bullet> bullets;
-        private int _cooldown; // nem itt kene legyen
+        private double _cooldown; // nem itt kene legyen
         private Random _rnd;
+        private Thread _gameThread;
+        private int _exiting;
+        private bool _paused;
         public ConcurrentQueue<GameEventType> Events { get; private set; }
         
         //TODO(nektek): kellene, hogy megkapjam startban paramétereknél a spritek méretét
@@ -48,49 +51,65 @@ namespace GameLogic
             _cooldown = 0;
             _rnd = new Random();
 
-            var t = new Timer(Heartbeat, null, 0, 10);
             var nState = new GameState {PlayerPosition = new Vector2(5,20)};
 
             Events = new ConcurrentQueue<GameEventType>();
 
             CurrState = nState;
+
+            _gameThread = new Thread(GameLoop);
+            _gameThread.IsBackground = true;
+            _gameThread.Start();
+
+            _exiting = 0;
         }
 
-        private void Heartbeat(object state)
+        private void GameLoop()
         {
-            var dx = (Input.InputPos.X - CurrState.PlayerPosition.X)/100;
-            var dy = (Input.InputPos.Y - CurrState.PlayerPosition.Y)/100;
-
-            var nState = new GameState
+            var lastTime = DateTime.Now;
+            while (_exiting == 0)
+            {
+                var elapsedTime = (DateTime.Now - lastTime).TotalMilliseconds;
+                lastTime = DateTime.Now;
+                if (!_paused)
                 {
-                    PlayerPosition = new Vector2(CurrState.PlayerPosition.X + dx, CurrState.PlayerPosition.Y + dy),
-                };
+                    var dx = (Input.InputPos.X - CurrState.PlayerPosition.X)/1000* elapsedTime;
+                    var dy = (Input.InputPos.Y - CurrState.PlayerPosition.Y)/1000* elapsedTime;
 
-            if(_cooldown>0)--_cooldown;
-            else if (Input.FirePressed)
-            {
-                CreateNewBullet();
-                Events.Enqueue(GameEventType.LaserFired);
-                _cooldown = 25;
+                    var nState = new GameState
+                        {
+                            PlayerPosition =
+                                new Vector2((float) (CurrState.PlayerPosition.X + dx), (float) (CurrState.PlayerPosition.Y + dy)),
+                        };
+
+                    if (_cooldown > 0) _cooldown -= elapsedTime;
+                    else if (Input.FirePressed)
+                    {
+                        CreateNewBullet();
+                        Events.Enqueue(GameEventType.LaserFired);
+                        _cooldown = 250;
+                    }
+
+                    _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
+
+                    if (_rnd.Next(0, 1000) > 990 && enemies.Count < 10)
+                    {
+                        CreateNewEnemy();
+                    }
+                    Update(nState, elapsedTime);
+                    CollisionCheck();
+
+                    CurrState = nState;
+                }
             }
-
-            _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
-
-            if (_rnd.Next(0, 1000) > 990&& enemies.Count <10)
-            {
-                CreateNewEnemy();
-            }
-            Update(nState);
-            CollisionCheck();
-
-            CurrState = nState;
+            ++_exiting;
         }
 
         #region Update
         /// <summary>
         /// Az ellenségek és lövedékek mozgatása, törlése, stb
         /// </summary>
-        public void Update(GameState nState)
+        public void Update(GameState nState, double elapsedTime)
         {
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
@@ -99,7 +118,7 @@ namespace GameLogic
                     enemies.RemoveAt(i);
                     Events.Enqueue(GameEventType.EnemyDestroyed);
                 } else
-                    enemies[i].Move();
+                    enemies[i].Move(elapsedTime);
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             for (int i = 0; i < bullets.Count; ++i)
@@ -107,7 +126,7 @@ namespace GameLogic
                 if (!bullets[i].active)
                     bullets.RemoveAt(i);
                 else
-                    bullets[i].Move();
+                    bullets[i].Move(elapsedTime);
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             if (_pilot.ship.health <= 0)
@@ -197,7 +216,7 @@ namespace GameLogic
 
         public void Dispose()
         {
-            ;
+            _exiting = 1;
         }
     }
 }

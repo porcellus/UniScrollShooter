@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using GameLogic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -41,6 +42,10 @@ namespace View.Screens
         private List<Vector2> _stars; // a hatterben elrepulo csillagok
         GameLogic.Game _game;
 
+        private Timer _musicTimer;
+        private List<string> _bgMusicList;
+        private int _bgMusicIndex;
+
         #endregion
 
         #region Initialization
@@ -62,7 +67,7 @@ namespace View.Screens
         /// </summary>
         public override void LoadContent()
         {
-            if(_content == null)
+            if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
@@ -72,7 +77,7 @@ namespace View.Screens
             _starTexture = _content.Load<Texture2D>("star1");
             _content.Load<SoundEffect>("Sounds/laser");
 
-            _game = new GameLogic.Game();/*
+            _game = new GameLogic.Game(); /*
             _game.GameEnded += (sender, args) =>
                 {
                     ScreenManager.RemoveScreen(this);
@@ -81,8 +86,19 @@ namespace View.Screens
 
             var rnd = new Random();
             for (int i = 0; i < 100; ++i)
-                _stars.Add(new Vector2(rnd.Next(0, 125) / 100f, rnd.Next(0, 100) / 100f));
-            _game.Start();           
+                _stars.Add(new Vector2(rnd.Next(0, 125)/100f, rnd.Next(0, 100)/100f));
+            _game.Start();
+
+            _bgMusicList = new List<string> {"Sounds/01"};
+            _bgMusicIndex = 0;
+
+            _musicTimer = new Timer(state =>
+            {
+                                                _bgMusicIndex = (_bgMusicIndex + 1) % _bgMusicList.Count;
+                                                _content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Play();
+                                                _musicTimer.Change((int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds,
+                                                               (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
+            }, null, 0, (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
         }
 
 
@@ -127,7 +143,8 @@ namespace View.Screens
                 new Input
                 {
                     InputPos = new Vector2(input.MouseState.X, input.MouseState.Y),
-                    FirePressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.Space)
+                    FirePressed = input.CurrentKeyboardStates[0].IsKeyDown(Keys.Space) ||
+                                  input.MouseState.LeftButton == ButtonState.Pressed
                 };
             if (input.CurrentKeyboardStates[0].IsKeyDown(Keys.P) &&
                 !input.LastKeyboardStates[0].IsKeyDown(Keys.P))
@@ -155,7 +172,7 @@ namespace View.Screens
             var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
             spriteBatch.Begin();
-            var blankSp = _content.Load<Texture2D>("blank");
+            //var blankSp = _content.Load<Texture2D>("blank");
             var enemySp = _content.Load<Texture2D>("enemy_spaceship");
             var lsRedSp = _content.Load<Texture2D>("laserbeam_red");
             var lsBlueSp = _content.Load<Texture2D>("laserbeam_blue");

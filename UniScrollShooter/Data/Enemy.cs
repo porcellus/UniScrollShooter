@@ -48,10 +48,10 @@ namespace Data
 
         public EnemyType type;
 
-        public void Move()
+        public void Move(double elapsedTime)
         {
-            posX += type.speed * vx;
-            posX += type.speed * vy;
+            posX += type.speed * vx * elapsedTime / 20;
+            posX += type.speed * vy * elapsedTime / 20;
         }
     }
 }

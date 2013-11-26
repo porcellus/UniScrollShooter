@@ -14,15 +14,15 @@ namespace Data.FixedReferences
 
         public static EnemyType Small
         {
-            get { return _small ?? (_small = new EnemyType(1, 4, 10)); }
+            get { return _small ?? (_small = new EnemyType(5, 4, 10)); }
         }
         public static EnemyType Medium
         {
-            get { return _medium ?? (_medium = new EnemyType(2, 10, 20)); }
+            get { return _medium ?? (_medium = new EnemyType(10, 10, 20)); }
         }
         public static EnemyType Big
         {
-            get { return _big ?? (_big = new EnemyType(3, 25, 30)); }
+            get { return _big ?? (_big = new EnemyType(15, 25, 30)); }
         }
 
         public Double speed { get; private set; }
