@@ -5,9 +5,6 @@ using System.Text;
 
 namespace Data.FixedReferences
 {
-    /// <summary>
-    /// Ship with common attributes, now name and power
-    /// </summary>
     public class ShipType
     {
         //private:

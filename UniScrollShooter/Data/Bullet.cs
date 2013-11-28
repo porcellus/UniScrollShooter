@@ -2,30 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Data.FixedReferences;
 
 namespace Data
 {
+    public enum BulletKind
+    {
+        Laser, Exploded, Rocket
+    }
+
     public class Bullet : ObjectBase
     {
         //private:
         public Boolean _active; 
-        private float _speed;
-
+        private Double _speed;
+        private BulletType _type;
         private Double _vx;  // irányvektor
         private Double _vy;
 
         //public:
-        public Bullet(Double x, Double y, Int32 width_, Int32 height_, Int32 damage_)
+        public Bullet(Double x_, Double y_, Int32 width_, Int32 height_, Int32 damage_, BulletKind kind_)
         {
-            posX = x;
-            posY = y;
+            posX = x_;
+            posY = y_;
             width = width_;
             height = height_;
-            damage = damage_;
+            switch (kind_)
+            {
+                case BulletKind.Laser:
+                    {
+                        _type = BulletType.Laser;
+                        break;
+                    }
+                case BulletKind.Exploded:
+                    {
+                        _type = BulletType.Exploded;
+                        break;
+                    }
+                case BulletKind.Rocket:
+                    {
+                        _type = BulletType.Rocket;
+                        break;
+                    }
+            }
+            damage = damage_+_type._bonusdamage;
             _active = true;
 
             _vx = 1; _vy = 0;
-            _speed = 20f;
+            _speed = _type.speed;
         }
 
         public void Move(double elapsedTime)

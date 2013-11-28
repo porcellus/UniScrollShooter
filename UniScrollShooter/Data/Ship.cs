@@ -6,14 +6,12 @@ using Data.FixedReferences;
 
 namespace Data
 {
-    /// <summary>
-    /// Ship with attributes that depend on current ship
-    /// </summary>
     class Ship : ObjectBase
     {
         //private:
         private Int32 _shield;
         private ShipType _type;
+        private BulletKind _bulletkind;
 
         //public:
         public Ship(Int32 width_, Int32 height_)
@@ -24,6 +22,7 @@ namespace Data
             width = width_;
             height = height_;
             damage = _type.basedamage;
+            _bulletkind = BulletKind.Laser;
         }
 
         public void DoDamage(int x)
@@ -48,11 +47,8 @@ namespace Data
                 health += x;
         }
      
-        public Int32 shield
-        {
-            get { return _shield; }
-        }
-        
+        public Int32 shield { get { return _shield; } }
+        public BulletKind bulletKind {  get { return _bulletkind; } }
     }
 
 }

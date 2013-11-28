@@ -48,6 +48,7 @@ namespace Data
         {
             _ship.DoDamage(x);
         }
+        public BulletKind bulletKind { get { return _ship.bulletKind; } }
 
         public void setPosition(Double x, Double y)
         {

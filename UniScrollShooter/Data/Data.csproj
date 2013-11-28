@@ -38,9 +38,12 @@
     <Compile Include="Bullet.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="FileManager.cs" />
+    <Compile Include="FixedReferences\BulletType.cs" />
     <Compile Include="FixedReferences\EnemyType.cs" />
+    <Compile Include="FixedReferences\ModuleType.cs" />
     <Compile Include="FixedReferences\ShipType.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="Module.cs" />
     <Compile Include="ObjectBase.cs" />
     <Compile Include="Pilot.cs" />
     <Compile Include="Ship.cs" />

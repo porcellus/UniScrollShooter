@@ -6,6 +6,11 @@ using Data.FixedReferences;
 
 namespace Data
 {
+    public enum EnemyKind
+    {
+        Small, Medium, Big
+    }
+
     public class Enemy : ObjectBase
     {
         //private:
@@ -14,7 +19,7 @@ namespace Data
         private EnemyType _type;
 
         //public:
-        public Enemy(int kind_, Double x, Double y, Int32 width_, Int32 height_)
+        public Enemy(Double x, Double y, Int32 width_, Int32 height_, EnemyKind kind_)
         {
             health = 100;
             posX = x;
@@ -25,17 +30,17 @@ namespace Data
             _vy = 0;
             switch (kind_)
             {
-                case 0:
+                case EnemyKind.Small:
                     {
                         _type = EnemyType.Small;
                         break;
                     }
-                case 1:
+                case EnemyKind.Medium:
                     {
                         _type = EnemyType.Medium;
                         break;
                     }
-                default:
+                case EnemyKind.Big:
                     {
                         _type = EnemyType.Big;
                         break;
