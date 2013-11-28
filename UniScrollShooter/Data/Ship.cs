@@ -9,27 +9,31 @@ namespace Data
     /// <summary>
     /// Ship with attributes that depend on current ship
     /// </summary>
-    public class Ship
+    class Ship : ObjectBase
     {
-        public Ship(Int32 widht_, Int32 height_)
+        //private:
+        private Int32 _shield;
+        private ShipType _type;
+
+        //public:
+        public Ship(Int32 width_, Int32 height_)
         {
             health = 100;
-            shield = 100;
-            type = ShipType.BigShip;
-            width = widht_;
+            _shield = 100;
+            _type = ShipType.BigShip;
+            width = width_;
             height = height_;
-            damage = type.basedamage;
-            //Modules = new List<Module>();
+            damage = _type.basedamage;
         }
 
         public void DoDamage(int x)
         {
-            if (shield >= x)
-                shield -= x;
+            if (_shield >= x)
+                _shield -= x;
             else
             {
-                health -= x-shield;
-                shield = 0;
+                health -= x-_shield;
+                _shield = 0;
             }
         }
 
@@ -37,23 +41,17 @@ namespace Data
         {
             if (health + x > 100)
             {
-                shield += health + x - 100;
+                _shield += health + x - 100;
                 health = 100;
             }
             else
                 health += x;
         }
-
-        public Int32 health { get; set; }
-        public Int32 shield { get; set; }
-        public Int32 damage { get; set; }
-
-        public ShipType type { get; set; }
-        public Double posX { get; set; }
-        public Double posY { get; set; }
-        public Int32 width { get; set; }
-        public Int32 height { get; set; }
-        //public List<Modules> Modules { get; set; }
+     
+        public Int32 shield
+        {
+            get { return _shield; }
+        }
         
     }
 

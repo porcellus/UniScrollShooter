@@ -7,11 +7,23 @@ namespace Data.FixedReferences
 {
     public class EnemyType
     {
-        //remélem erre gondoltál
+        //private:
         private static EnemyType _small;
         private static EnemyType _medium;
         private static EnemyType _big;
 
+        public Double _speed;
+        public Int32 _damage;
+        public Int32 _value;
+
+        private EnemyType(Double speed_, Int32 damage_, Int32 value_)
+        {
+            _speed = speed_;
+            _damage = damage_;
+            _value = value_;
+        }
+
+        //public:
         public static EnemyType Small
         {
             get { return _small ?? (_small = new EnemyType(5, 4, 10)); }
@@ -25,15 +37,9 @@ namespace Data.FixedReferences
             get { return _big ?? (_big = new EnemyType(15, 25, 30)); }
         }
 
-        public Double speed { get; private set; }
-        public Int32 damage { get; private set; }
-        public Int32 value { get; private set; }
+        public Double speed { get { return _speed; } }
+        public Int32 damage { get { return _damage; } }
+        public Int32 value { get { return _value; } }
 
-        private EnemyType(Double speed_, Int32 damage_, Int32 value_)
-        {
-            speed = speed_;
-            damage = damage_;
-            value = value_;
-        }
     }
 }

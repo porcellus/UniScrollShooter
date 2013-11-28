@@ -6,52 +6,53 @@ using Data.FixedReferences;
 
 namespace Data
 {
-    public class Enemy
+    public class Enemy : ObjectBase
     {
-        public Enemy(int kind_, Double x, Double y, Int32 widht_, Int32 height_)
+        //private:
+        private Double _vx;         //irányvektor
+        private Double _vy;
+        private EnemyType _type;
+
+        //public:
+        public Enemy(int kind_, Double x, Double y, Int32 width_, Int32 height_)
         {
             health = 100;
             posX = x;
             posY = y;
-            width = widht_;
+            width = width_;
             height = height_;
-            vx = -0.5;
-            vy = 0;
+            _vx = -0.5;
+            _vy = 0;
             switch (kind_)
             {
                 case 0:
                     {
-                        type = EnemyType.Small;
+                        _type = EnemyType.Small;
                         break;
                     }
                 case 1:
                     {
-                        type = EnemyType.Medium;
+                        _type = EnemyType.Medium;
                         break;
                     }
                 default:
                     {
-                        type = EnemyType.Big;
+                        _type = EnemyType.Big;
                         break;
                     }
             }
+            damage = _type.damage;
         }
 
-        public Double health { get; set; }
-        public Double posX { get; set; }
-        public Double posY { get; set; }
-        public Int32 width { get; set; }
-        public Int32 height { get; set; }
-        //irányvektor
-        private Double vx;
-        private Double vy;
-
-        public EnemyType type;
+        public Int32 value
+        {
+            get { return _type.value; }
+        }
 
         public void Move(double elapsedTime)
         {
-            posX += type.speed * vx * elapsedTime / 20;
-            posX += type.speed * vy * elapsedTime / 20;
+            posX += _type.speed * _vx * elapsedTime / 20;
+            posX += _type.speed * _vy * elapsedTime / 20;
         }
     }
 }

@@ -7,41 +7,52 @@ namespace Data
 {
     public class Pilot
     {
+        //private:
+        private Int32 _exp;
+        private Int32 _money;
+        private Ship _ship;
+
+        //public:
         public void Init(double x, double y, Int32 w, Int32 h)
         {
-            exp = 0;
-            money = 0;
+            _exp = 0;
+            _money = 0;
 
-            ship = new Ship(w, h);
-            ship.posX = x;
-            ship.posY = y;
+            _ship = new Ship(w, h);
+            _ship.posX = x;
+            _ship.posY = y;
         }
 
-        public Int32 exp { get; set; }
-        private Int32 money { get; set; }
-        private Dictionary<String, Int32> _attrs { get; set; }
-        public Ship ship;
-       
-        public void AddNewAttribute(String name, Int32 value)
-        {
-            _attrs.Add(name, value);
+        //interfész
+        public Int32 exp 
+        { 
+            get { return _exp; } 
+            set { _exp = value; } 
         }
-
-        public void ModifyAttributeValue(String name, Int32 value)
+        
+        public Int32 money
         {
-            _attrs[name] += value;
-        }
+            get { return _money; }
+            set { _money = value; }
+        }    
 
-        public Int32 getAttribute(String name)
+        public Double posX { get { return _ship.posX; } }
+        public Double posY { get { return _ship.posY; } }
+
+        public Int32 width { get { return _ship.width; } }
+        public Int32 height { get { return _ship.height; } }
+
+        public Double health { get { return _ship.health; } }
+        public Int32 damage { get { return _ship.damage; } }
+        public void DamageOnShip(Int32 x)
         {
-            return _attrs[name];
+            _ship.DoDamage(x);
         }
 
         public void setPosition(Double x, Double y)
         {
-            ship.posX = x;
-            ship.posY = y;
+            _ship.posX = x;
+            _ship.posY = y;
         }
-
     }
 }

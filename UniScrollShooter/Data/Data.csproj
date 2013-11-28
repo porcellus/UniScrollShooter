@@ -41,6 +41,7 @@
     <Compile Include="FixedReferences\EnemyType.cs" />
     <Compile Include="FixedReferences\ShipType.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="ObjectBase.cs" />
     <Compile Include="Pilot.cs" />
     <Compile Include="Ship.cs" />
   </ItemGroup>

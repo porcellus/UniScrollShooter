@@ -5,8 +5,16 @@ using System.Text;
 
 namespace Data
 {
-    public class Bullet
+    public class Bullet : ObjectBase
     {
+        //private:
+        public Boolean _active; 
+        private float _speed;
+
+        private Double _vx;  // irányvektor
+        private Double _vy;
+
+        //public:
         public Bullet(Double x, Double y, Int32 width_, Int32 height_, Int32 damage_)
         {
             posX = x;
@@ -14,29 +22,34 @@ namespace Data
             width = width_;
             height = height_;
             damage = damage_;
-            active = true;
+            _active = true;
 
-            vx = 1; vy = 0;
-            speed = 20f;
+            _vx = 1; _vy = 0;
+            _speed = 20f;
         }
 
         public void Move(double elapsedTime)
         {
-            posX += vx * speed * elapsedTime / 20;
-            posY += vy * speed * elapsedTime / 20;
+            posX += _vx * _speed * elapsedTime / 20;
+            posY += _vy * _speed * elapsedTime / 20;
         }
 
-        public Int32 damage;
-        public Double posX { get; set; }
-        public Double posY { get; set; }
-        public Int32 width { get; set; }
-        public Int32 height { get; set; }
-        public Boolean active { get; set; }
-        // irányvektor
-        public Double vx;
-        public Double vy;
+        public Boolean active
+        {
+            get { return _active; }
+            set { _active = value; }
+        }
 
-        private float speed;
+        public Double vx
+        {
+            get { return _vx; }
+            set { _vx = value; }
+        }
 
+        public Double vy
+        {
+            get { return _vy; }
+            set { _vy = value; }
+        }
     }
 }

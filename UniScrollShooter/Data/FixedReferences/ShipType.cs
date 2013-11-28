@@ -10,10 +10,23 @@ namespace Data.FixedReferences
     /// </summary>
     public class ShipType
     {
+        //private:
         private static ShipType _smallShip;
         private static ShipType _mediumShip;
         private static ShipType _bigShip;
 
+        private String _name;
+        private Int32 _speed;
+        private Int32 _basedamage;
+        
+        private ShipType(String name_, Int32 speed_, Int32 bdamage_)
+        {
+            _name = name_;
+            _speed = speed_;
+            _basedamage = bdamage_;
+        }
+
+        //public:
         public static ShipType SmallShip
         {
             get { return _smallShip ?? (_smallShip = new ShipType("kicsi", 2, 10)); }
@@ -24,18 +37,13 @@ namespace Data.FixedReferences
         }
         public static ShipType BigShip
         {
-            get { return _bigShip ?? (_bigShip = new ShipType("nagy", 8, 30)); }
+            get { return _bigShip ?? (_bigShip = new ShipType("nagy", 8, 50)); }
         }
-        public String name { get; private set; }
-        public Int32 speed { get; private set; }
-        public Int32 basedamage { get; private set; }
 
-        private ShipType(String name_, Int32 speed_, Int32 bdamage_)
-        {
-            name = name_;
-            speed = speed_;
-            basedamage = bdamage_;
-        }
+        public String name { get { return _name; } }
+        public Int32 speed { get { return _speed; } }
+        public Int32 basedamage { get { return _basedamage; } }
+
     }
 
 }

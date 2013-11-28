@@ -36,9 +36,6 @@ namespace GameLogic
         private int _exiting;
         private bool _paused;
         public ConcurrentQueue<GameEventType> Events { get; private set; }
-        
-        //TODO(nektek): kellene, hogy megkapjam startban paramétereknél a spritek méretét
-        //TODO: pálya létrehozása kezelése(majd)
 
         public void Start()
         {
@@ -90,7 +87,7 @@ namespace GameLogic
                         _cooldown = 250;
                     }
 
-                    _pilot.setPosition(_pilot.ship.posX + dx, _pilot.ship.posY + dy);
+                    _pilot.setPosition(_pilot.posX + dx, _pilot.posY + dy);
 
                     if (_rnd.Next(0, 100000) == 1 && enemies.Count(enemy => enemy.posX > 1500) < 10)
                     {
@@ -129,7 +126,7 @@ namespace GameLogic
                     bullets[i].Move(elapsedTime);
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
-            if (_pilot.ship.health <= 0)
+            if (_pilot.health <= 0)
             {
                 //Exception dobás lessz
             }
@@ -146,10 +143,10 @@ namespace GameLogic
             Rectangle rectangle1;
             Rectangle rectangle2;
 
-            rectangle1 = new Rectangle((int)_pilot.ship.posX,
-            (int)_pilot.ship.posY,
-            _pilot.ship.width,
-            _pilot.ship.height);
+            rectangle1 = new Rectangle((int)_pilot.posX,
+            (int)_pilot.posY,
+            _pilot.width,
+            _pilot.height);
             #region ellenség vs mi ütközés
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -160,11 +157,11 @@ namespace GameLogic
 
                 if (rectangle1.Intersects(rectangle2))
                 {
-                    _pilot.ship.DoDamage(enemies[i].type.damage);
+                    _pilot.DamageOnShip(enemies[i].damage);
                     enemies[i].health = 0;
-                    _pilot.exp += enemies[i].type.value;
+                    _pilot.exp += enemies[i].value;
 
-                    if (_pilot.ship.health <= 0)
+                    if (_pilot.health <= 0)
                     { // valami 
                     }
                 }
@@ -201,7 +198,7 @@ namespace GameLogic
         public void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.ship.posX + _pilot.ship.width, _pilot.ship.posY + _pilot.ship.height / 2f, 65, 21, _pilot.ship.damage));
+            bullets.Add(new Bullet(_pilot.posX + _pilot.width, _pilot.posY + _pilot.height / 2f, 65, 21, _pilot.damage));
             Events.Enqueue(GameEventType.LaserFired);
 
         }
