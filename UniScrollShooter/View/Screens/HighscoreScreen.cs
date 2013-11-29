@@ -47,16 +47,20 @@ namespace View.Screens
 
             var button_off_bg = _content.Load<Texture2D>("button_off");
             var button_on_bg = _content.Load<Texture2D>("button_on");
+            var list_bg = _content.Load<Texture2D>("list");
             int width = button_off_bg.Width / 2;
             int height = button_off_bg.Height / 2;
-            int shift = height * 2 + 10;
             int topleftX = fullscreen.Center.X - width;
             int topleftY = fullscreen.Center.Y - 100 - height;
+
+            var lstHighscores = new Controls.List(list_bg, new Vector2(topleftX, topleftY), "TOP 5");
+            lstHighscores.Font = _content.Load<SpriteFont>("menufont");
+            _controls.Add(lstHighscores);
 
             var btnBack = new Controls.Button(button_on_bg, button_off_bg,
                                           new Vector2(
                                             topleftX,
-                                            topleftY),
+                                            topleftY + list_bg.Height + 10),
                                           "BACK TO MAIN MENU");
             btnBack.Clicked += (sender, args) =>
             {

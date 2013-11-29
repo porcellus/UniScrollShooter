@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\List.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
