@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using View.ScreenManagement;
+using Data;
 
 namespace View.Controls
 {
@@ -14,6 +15,8 @@ namespace View.Controls
     {
         private Rectangle _bounds;
         private Texture2D _texture;
+        private HighscoreList _list;
+        private FileManager _fm;
 
         public new Vector2 Position
         {
@@ -32,6 +35,9 @@ namespace View.Controls
         {
             base.Text = text;
             _texture = texture;
+            _list = new HighscoreList();
+            _fm = new FileManager();
+            _list = _fm.LoadHighscoreList();
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
 
@@ -48,11 +54,11 @@ namespace View.Controls
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, _bounds, Text, Color);
-                    DrawListText(spriteBatch, Font, _bounds, Color, 1, "VALAKI", 5000);
-                    DrawListText(spriteBatch, Font, _bounds, Color, 2, "VALAKI", 4000);
-                    DrawListText(spriteBatch, Font, _bounds, Color, 3, "VALAKI", 3000);
-                    DrawListText(spriteBatch, Font, _bounds, Color, 4, "VALAKI", 2000);
-                    DrawListText(spriteBatch, Font, _bounds, Color, 5, "VALAKI", 1000);
+
+                    foreach (Entry entry in _list.GetEntries())
+                    {
+                        DrawListText(spriteBatch, Font, _bounds, Color, entry.Rank, entry.Name, entry.Score);
+                    }
                 }
             }
         }

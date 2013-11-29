@@ -34,5 +34,12 @@ namespace Data
                 throw new FileIOException();
             }
         }
+
+        public HighscoreList LoadHighscoreList()
+        {
+            HighscoreList list = new HighscoreList();
+            list.LoadHighscores("..\\..\\..\\..\\UniScrollShooterContent\\highscores.list");
+            return list;
+        }
     }
 }

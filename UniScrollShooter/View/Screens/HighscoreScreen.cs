@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using View.Controls;
 using View.ScreenManagement;
+using Data;
 
 namespace View.Screens
 {
