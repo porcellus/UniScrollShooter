@@ -12,32 +12,32 @@ namespace Data.FixedReferences
         private static ShipType _mediumShip;
         private static ShipType _bigShip;
 
-        private String _name;
+        private Int32 _id;
         private Int32 _speed;
         private Int32 _basedamage;
         
-        private ShipType(String name_, Int32 speed_, Int32 bdamage_)
+        private ShipType(Int32 speed_, Int32 basedamage_, Int32 id_)
         {
-            _name = name_;
+            _id = id_;
             _speed = speed_;
-            _basedamage = bdamage_;
+            _basedamage = basedamage_; 
         }
 
         //public:
         public static ShipType SmallShip
         {
-            get { return _smallShip ?? (_smallShip = new ShipType("kicsi", 2, 10)); }
+            get { return _smallShip ?? (_smallShip = new ShipType(2, 10, 0)); }
         }
         public static ShipType MediumShip
         {
-            get { return _mediumShip ?? (_mediumShip = new ShipType("közepes", 4, 20)); }
+            get { return _mediumShip ?? (_mediumShip = new ShipType(4, 20, 1)); }
         }
         public static ShipType BigShip
         {
-            get { return _bigShip ?? (_bigShip = new ShipType("nagy", 8, 50)); }
+            get { return _bigShip ?? (_bigShip = new ShipType(8, 50, 2)); }
         }
 
-        public String name { get { return _name; } }
+        public Int32 id { get { return _id; } }
         public Int32 speed { get { return _speed; } }
         public Int32 basedamage { get { return _basedamage; } }
 
