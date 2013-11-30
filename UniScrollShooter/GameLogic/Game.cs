@@ -13,7 +13,7 @@ namespace GameLogic
 {
     public enum GameEventType
     {
-        LaserFired, EnemyDestroyed,
+        LaserFired, EnemyDestroyed, LevelEnd, PlayerDead
     }
 
     public struct Input
@@ -35,6 +35,8 @@ namespace GameLogic
         private Thread _gameThread;
         private int _exiting;
         private bool _paused;
+        private MapGenerator _mapGen;
+        private Boolean _waitForLevelEnd;
         public ConcurrentQueue<GameEventType> Events { get; private set; }
 
         public void Start()
@@ -45,6 +47,9 @@ namespace GameLogic
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
 
+            _mapGen = new MapGenerator();
+            _mapGen.LevelUp += new EventHandler<EventArgs>(LevelUpHandler);
+
             _cooldown = 0;
             _rnd = new Random();
 
@@ -53,12 +58,24 @@ namespace GameLogic
             Events = new ConcurrentQueue<GameEventType>();
 
             CurrState = nState;
+            _waitForLevelEnd = false;
 
             _gameThread = new Thread(GameLoop);
             _gameThread.IsBackground = true;
             _gameThread.Start();
 
             _exiting = 0;
+        }
+
+        public void ContinueGame()
+        {
+            _waitForLevelEnd = false;
+            _exiting = 0;
+        }
+
+        private void LevelUpHandler(object sender, EventArgs e)
+        {
+            _waitForLevelEnd = true;
         }
 
         private void GameLoop()
@@ -89,17 +106,24 @@ namespace GameLogic
 
                     _pilot.setPosition(_pilot.posX + dx, _pilot.posY + dy);
 
-                    if (_rnd.Next(0, 100000) == 1 && enemies.Count(enemy => enemy.posX > 1500) < 10)
+                    /*if (_rnd.Next(0, 100000) == 1 && enemies.Count(enemy => enemy.posX > 1500) < 10)
                     {
                         CreateNewEnemy();
+                    }*/
+                    if (_mapGen.AbleToCreateNewEnemy(elapsedTime) /*&& enemies.Count(enemy => enemy.posX < 1500) < 4*/ && !_waitForLevelEnd)
+                    {
+                        CreateNewEnemy(_mapGen.NewEnemyType());
                     }
+                    else { 
+                        if (enemies.Count != 0) 
+                        { } }
                     Update(nState, elapsedTime);
                     CollisionCheck();
 
                     CurrState = nState;
                 }
             }
-            ++_exiting;
+            //++_exiting;
         }
 
         #region Update
@@ -117,21 +141,38 @@ namespace GameLogic
                     enemies.RemoveAt(i);
                     Events.Enqueue(GameEventType.EnemyDestroyed);
                 } else
+                {
                     enemies[i].Move(elapsedTime);
+                    if (enemies[i].posX < 0)
+                        enemies.RemoveAt(i);
+                }
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             for (int i = 0; i < bullets.Count; ++i)
             {
-                if (!bullets[i].active)
+                if (!bullets[i].active || bullets[i].posX>2000)
                     bullets.RemoveAt(i);
                 else
                     bullets[i].Move(elapsedTime);
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
+            //játékos vége
             if (_pilot.health <= 0)
             {
-                //Exception dobás lessz
+                enemies.Clear();
+                bullets.Clear();
+                Events.Enqueue(GameEventType.PlayerDead);
+                _exiting++;
             }
+            //pálya vége
+            if (enemies.Count == 0 && _waitForLevelEnd==true)
+            {
+                Events.Enqueue(GameEventType.LevelEnd);
+                enemies.Clear();
+                bullets.Clear();
+                _exiting++;
+            }
+            
         }
         #endregion
 
@@ -161,10 +202,6 @@ namespace GameLogic
                 {
                     _pilot.DamageOnShip(enemies[i].damage);
                     enemies[i].health = 0;
-                    
-                    if (_pilot.health <= 0)
-                    { // valami 
-                    }
                 }
             }
             #endregion
@@ -201,16 +238,16 @@ namespace GameLogic
         public void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.posX + _pilot.width, _pilot.posY + _pilot.height / 2f, 65, 21, _pilot.damage, _pilot.bulletKind));
+            bullets.Add(new Bullet(_pilot.posX + _pilot.width, _pilot.posY + _pilot.height / 2f-12, 65, 21, _pilot.damage, _pilot.bulletKind));
             Events.Enqueue(GameEventType.LaserFired);
 
         }
 
         //új ellenség
-        public void CreateNewEnemy()
+        public void CreateNewEnemy(EnemyKind kind)
         {
             //típus, koordináták, méretek
-            enemies.Add(new Enemy(2000, _rnd.Next(100,700), 128, 61, EnemyKind.Small));
+            enemies.Add(new Enemy(2000+_rnd.Next(-100,100), _rnd.Next(100,700), 128, 61, kind));
         }
         #endregion
 

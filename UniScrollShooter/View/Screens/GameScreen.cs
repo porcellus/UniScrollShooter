@@ -183,14 +183,19 @@ namespace View.Screens
                 spriteBatch.Draw(_starTexture, new Vector2(star.X*fullscreen.Width, star.Y*fullscreen.Height),
                                  Color.White);
 
-            foreach (var enemy in _game.enemies.Where(en => en.posX > 0 && en.posY > 0 && en.posX < fullscreen.Width && en.posY < fullscreen.Height))
-                spriteBatch.Draw(enemySp, new Vector2((float) enemy.posX, (float) enemy.posY), Color.White);
+            try
+            {
+                foreach (var enemy in _game.enemies.Where(en => en.posX > 0 && en.posY > 0 && en.posX < fullscreen.Width && en.posY < fullscreen.Height))
+                    spriteBatch.Draw(enemySp, new Vector2((float)enemy.posX, (float)enemy.posY), Color.White);
+            
 
-            foreach (var bullet in _game.bullets.Where(bul => bul.posX > 0 && bul.posY > 0 && bul.posX < fullscreen.Width && bul.posY < fullscreen.Height))
-                spriteBatch.Draw(lsRedSp, new Vector2((float) bullet.posX, (float) bullet.posY), lsRedSp.Bounds,
-                                 Color.White,
-                                 bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0, new Vector2(0, 0), 1,
-                                 SpriteEffects.None, 0f);
+                    foreach (var bullet in _game.bullets.Where(bul => bul.posX > 0 && bul.posY > 0 && bul.posX < fullscreen.Width && bul.posY < fullscreen.Height))
+                        spriteBatch.Draw(lsRedSp, new Vector2((float) bullet.posX, (float) bullet.posY), lsRedSp.Bounds,
+                                         Color.White,
+                                         bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0, new Vector2(0, 0), 1,
+                                         SpriteEffects.None, 0f);
+            } catch
+            {}
             GameEventType ev;
             while (_game.Events.TryDequeue(out ev))
             {
@@ -201,6 +206,12 @@ namespace View.Screens
                         break;
                     case GameEventType.EnemyDestroyed:
                         _content.Load<SoundEffect>("Sounds/explosion_small").Play();
+                        break;
+                    case GameEventType.LevelEnd:
+                        //shopscreen vagy valami betöltése
+                        break;
+                    case GameEventType.PlayerDead:
+                        //toplista vagy valami
                         break;
                 }
             }
