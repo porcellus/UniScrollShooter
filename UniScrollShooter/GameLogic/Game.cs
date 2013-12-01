@@ -130,7 +130,7 @@ namespace GameLogic
         /// <summary>
         /// Az ellenségek és lövedékek mozgatása, törlése, stb
         /// </summary>
-        public void Update(GameState nState, double elapsedTime)
+        private void Update(GameState nState, double elapsedTime)
         {
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
@@ -180,14 +180,14 @@ namespace GameLogic
         /// <summary>
         /// Ütközések ellenőrzése, élet, pontok, aktivitás beállítása
         /// </summary>
-        public void CollisionCheck()
+        private void CollisionCheck()
         {
             //a hajónk és az ellenségek ütközésének ellenőrzése
             Rectangle rectangle1;
             Rectangle rectangle2;
 
-            rectangle1 = new Rectangle((int)_pilot.posX,
-            (int)_pilot.posY,
+            rectangle1 = new Rectangle((int)_pilot.posX - _pilot.width/2,
+            (int)_pilot.posY-_pilot.height/2,
             _pilot.width,
             _pilot.height);
             #region ellenség vs mi ütközés
@@ -235,7 +235,7 @@ namespace GameLogic
 
         #region Create*
         //új lövedék létrehozása, pl.: kattintásra kellene szerintem
-        public void CreateNewBullet()
+        private void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
             bullets.Add(new Bullet(_pilot.posX + _pilot.width, _pilot.posY + _pilot.height / 2f-12, 65, 21, _pilot.damage, _pilot.bulletKind));
@@ -244,7 +244,7 @@ namespace GameLogic
         }
 
         //új ellenség
-        public void CreateNewEnemy(EnemyKind kind)
+        private void CreateNewEnemy(EnemyKind kind)
         {
             //típus, koordináták, méretek
             enemies.Add(new Enemy(2000+_rnd.Next(-100,100), _rnd.Next(100,700), 128, 61, kind));
@@ -255,5 +255,8 @@ namespace GameLogic
         {
             _exiting = 1;
         }
+
+        public Pilot pilot { get { return _pilot; } }
+        public Int32 level { get { return _mapGen.level; } }
     }
 }

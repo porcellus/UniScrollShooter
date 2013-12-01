@@ -216,8 +216,20 @@ namespace View.Screens
                 }
             }
 
+            //tulajdonság kiírások (élet, pajzs, tapasztalat, pénz, szint)
+            SpriteFont s = _content.Load<SpriteFont>("menufont");
+            spriteBatch.DrawString(s, "Health: "+_game.pilot.health, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y), Color.White);
+            spriteBatch.DrawString(s, "Shield: " + _game.pilot.shield, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 30), Color.White);
+
+            spriteBatch.DrawString(s, "Experience: " + _game.pilot.exp, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
+            spriteBatch.DrawString(s, "Money: " + _game.pilot.money, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
+
+            spriteBatch.DrawString(s, "Level: " + _game.level, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y), Color.WhiteSmoke);
+            //
+            
             var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
             spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
+
 
             spriteBatch.End();
         }

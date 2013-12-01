@@ -23,7 +23,7 @@ namespace Data
             _ellapsedTime = 0;
             _mobsOnLevel = 0;
         }
-        public Int32 Level { get { return _level; } }
+        public Int32 level { get { return _level; } }
 
         private Double Probablity(EnemyKind kind)
         {

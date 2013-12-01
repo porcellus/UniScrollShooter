@@ -48,6 +48,7 @@ namespace Data
         public Int32 height { get { return _ship.height; } }
 
         public Double health { get { return _ship.health; } }
+        public Double shield { get { return _ship.shield; } }
         public Int32 damage { get { return _ship.damage; } }
         public void DamageOnShip(Int32 x)
         {

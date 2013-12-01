@@ -72,6 +72,8 @@ namespace Data
             else
             {
                 health -= x-_shield;
+                if (health < 0)
+                    health = 0;
                 _shield = 0;
             }
         }
