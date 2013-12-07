@@ -212,6 +212,8 @@ namespace View.Screens
                         break;
                     case GameEventType.PlayerDead:
                         //toplista vagy valami
+                        //SpriteFont sFont = _content.Load<SpriteFont>("menufont");
+                        //spriteBatch.DrawString(sFont, "GAME OVER", new Vector2(viewport.X + viewport.Width/2, viewport.Y + viewport.Height/2), Color.White);
                         break;
                 }
             }

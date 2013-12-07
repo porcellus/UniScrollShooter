@@ -122,6 +122,7 @@
     <Compile Include="Screens\HighscoreScreen.cs" />
     <Compile Include="Screens\MainMenu.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
+    <Compile Include="Screens\ShopScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
