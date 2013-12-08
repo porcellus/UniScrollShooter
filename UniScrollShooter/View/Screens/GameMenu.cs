@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using View.Controls;
 using View.ScreenManagement;
+using Data;
 
 #endregion
 
@@ -76,9 +77,11 @@ namespace View.Screens
                                             topleftX,
                                             topleftY),
                                           "NEW GAME");
-            btn1.Clicked += (sender, args) => { 
+            btn1.Clicked += (sender, args) => {
+                Pilot pilot = new Pilot();
+                pilot.Init(10.0, 10.0, 172, 54);
                 ScreenManager.RemoveScreen(this); 
-                ScreenManager.AddScreen(new ShopScreen(), ControllingPlayer); 
+                ScreenManager.AddScreen(new ShopScreen(pilot), ControllingPlayer); 
             };
             btn1.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btn1);

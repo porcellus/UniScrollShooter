@@ -113,6 +113,7 @@
     <Compile Include="Controls\List.cs" />
     <Compile Include="Controls\ShopModules.cs" />
     <Compile Include="Controls\ShopPlayer.cs" />
+    <Compile Include="Controls\StatControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />

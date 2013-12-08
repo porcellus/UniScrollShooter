@@ -11,41 +11,38 @@ using Data;
 
 namespace View.Controls
 {
-    class ShopPlayer : Control
+    class StatControl : Control
     {
         private Rectangle _bounds;
-        private Texture2D _texture;
+        private Rectangle _bounds_plus;
+        private Rectangle _bounds_minus;
         private Texture2D _texture_plus;
         private Texture2D _texture_minus;
-        private FileManager _fm;
-        private Pilot _pilot;
-        private List<Control> _controls;
 
         public new Vector2 Position
         {
             get { return base.Position; }
+
             set
             {
                 base.Position = value;
-
-                _bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture.Width, _texture.Height);
+                _bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_plus.Width + _texture_minus.Width, _texture_plus.Height + _texture_minus.Height);
+                _bounds_plus = new Rectangle((int)base.Position.X, (int)base.Position.Y + _texture_plus.Height, _texture_plus.Width, _texture_plus.Height);
+                _bounds_minus = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_minus.Width, _texture_minus.Height);
             }
         }
 
-        public ShopPlayer(Texture2D texture, Texture2D texture_plus, Texture2D texture_minus, Vector2 position, string text, Pilot pilot)
+        public StatControl(Texture2D texture_plus, Texture2D texture_minus, Vector2 position, string text)
             : base(position)
         {
             base.Text = text;
-            _texture = texture;
-            _fm = new FileManager();
-            _pilot = pilot;
-            _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             _texture_plus = texture_plus;
             _texture_minus = texture_minus;
-            _controls = new List<Control>();
-
-            StatControl _testControl = new StatControl(_texture_plus, _texture_minus, new Vector2(100, 100), "STAT");
-            _controls.Add(_testControl);
+            _texture_plus = texture_plus;
+            _texture_minus = texture_minus;
+            _bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_plus.Width, _texture_plus.Height + _texture_minus.Height);
+            _bounds_plus = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_plus.Width, _texture_plus.Height);
+            _bounds_minus = new Rectangle((int)base.Position.X, (int)base.Position.Y + texture_plus.Height, _texture_minus.Width, _texture_minus.Height);
         }
 
         public override void UpdateInput(InputState input)
@@ -56,14 +53,13 @@ namespace View.Controls
         {
             if (Enabled)
             {
-                spriteBatch.Draw(_texture, _bounds, Color);
+                spriteBatch.Draw(_texture_plus, _bounds_plus, Color);
+                spriteBatch.Draw(_texture_minus, _bounds_minus, Color);
 
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, _bounds, Text, Color);
                 }
-
-                _controls.ForEach(a => a.Draw(spriteBatch));
             }
         }
 
@@ -75,17 +71,6 @@ namespace View.Controls
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
-        }
-
-        public static void DrawListText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color, int rank, string name, int score)
-        {
-            var size = font.MeasureString(name);
-            var textWidth = size.X;
-            var left = rectangle.Left + 10;
-            var top = rectangle.Top + rank * 40 + 45;
-            var topLeft = new Vector2(left, top);
-            batch.DrawString(font, rank + ".  " + name, topLeft, color);
-            batch.DrawString(font, score.ToString(), new Vector2(topLeft.X + 400, topLeft.Y), color);
         }
     }
 }

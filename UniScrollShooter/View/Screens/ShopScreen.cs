@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using View.Controls;
 using View.ScreenManagement;
+using Data;
 
 namespace View.Screens
 {
@@ -14,8 +15,9 @@ namespace View.Screens
     {
         #region Fields
 
-        ContentManager _content;
-        List<Control> _controls;
+        private ContentManager _content;
+        private List<Control> _controls;
+        private Pilot _pilot;
 
         #endregion
 
@@ -24,11 +26,12 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ShopScreen()
+        public ShopScreen(Pilot pilot)
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             _controls = new List<Control>();
+            _pilot = pilot;
         }
 
         /// <summary>
@@ -42,40 +45,43 @@ namespace View.Screens
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
-            var button_off_bg = _content.Load<Texture2D>("button_off");
-            var button_on_bg = _content.Load<Texture2D>("button_on");
-            var list_bg = _content.Load<Texture2D>("list");
-            int width = button_off_bg.Width / 2;
-            int height = button_off_bg.Height / 2;
+            var texture_button_off = _content.Load<Texture2D>("button_off");
+            var texture_button_on = _content.Load<Texture2D>("button_on");
+            var texture_list = _content.Load<Texture2D>("list");
+            var texture_plus = _content.Load<Texture2D>("plus");
+            var texture_minus = _content.Load<Texture2D>("minus");
+
+            int width = texture_button_off.Width / 2;
+            int height = texture_button_off.Height / 2;
             int shift = height * 2 + 10;
             int topleftX = fullscreen.Center.X - width;
             int topleftY = fullscreen.Center.Y - 100 - height;
 
-            var shopPlayer = new Controls.ShopPlayer(list_bg, new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - list_bg.Width, fullscreen.Top + 20), "PLAYER");
+            var shopPlayer = new Controls.ShopPlayer(texture_list, texture_plus, texture_minus, new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_list.Width, fullscreen.Top + 20), "PLAYER STATS", _pilot);
             shopPlayer.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(shopPlayer);
 
-            var shopModule = new Controls.ShopModules(list_bg, new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), "MODULES");
+            var shopModule = new Controls.ShopModules(texture_list, new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), "MODULES", _pilot);
             shopModule.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(shopModule);
 
-            var btnStart = new Controls.Button(button_on_bg, button_off_bg,
+            var btnStart = new Controls.Button(texture_button_on, texture_button_off,
                                           new Vector2(
-                                            shopModule.Position.X + list_bg.Width - button_off_bg.Width,
-                                            shopModule.Position.Y + list_bg.Height + 20),
+                                            shopModule.Position.X + texture_list.Width - texture_button_off.Width,
+                                            shopModule.Position.Y + texture_list.Height + 20),
                                           "START GAME");
             btnStart.Clicked += (sender, args) =>
             {
                 ScreenManager.RemoveScreen(this);
-                ScreenManager.AddScreen(new GameScreen(), ControllingPlayer);
+                ScreenManager.AddScreen(new GameScreen(_pilot), ControllingPlayer);
             };
             btnStart.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnStart);
 
-            var btnBack = new Controls.Button(button_on_bg, button_off_bg,
+            var btnBack = new Controls.Button(texture_button_on, texture_button_off,
                                           new Vector2(
                                             shopPlayer.Position.X,
-                                            shopPlayer.Position.Y + list_bg.Height + 20),
+                                            shopPlayer.Position.Y + texture_list.Height + 20),
                                           "BACK TO MAIN MENU");
             btnBack.Clicked += (sender, args) =>
             {
@@ -84,6 +90,7 @@ namespace View.Screens
             };
             btnBack.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnBack);
+
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace View.Controls
         private Rectangle _bounds;
         private Texture2D _texture;
         private FileManager _fm;
+        private Pilot _pilot;
 
         public new Vector2 Position
         {
@@ -29,12 +30,13 @@ namespace View.Controls
             }
         }
 
-        public ShopModules(Texture2D texture, Vector2 position, string text)
+        public ShopModules(Texture2D texture, Vector2 position, string text, Pilot pilot)
             : base(position)
         {
             base.Text = text;
             _texture = texture;
             _fm = new FileManager();
+            _pilot = pilot;
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
 

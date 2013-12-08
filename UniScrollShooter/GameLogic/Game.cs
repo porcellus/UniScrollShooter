@@ -39,11 +39,13 @@ namespace GameLogic
         private Boolean _waitForLevelEnd;
         public ConcurrentQueue<GameEventType> Events { get; private set; }
 
+        public Game(Pilot pilot)
+        {
+            _pilot = pilot;
+        }
+
         public void Start()
         {
-            _pilot = new Pilot();
-            _pilot.Init(10.0, 10.0, 172, 54);
-
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
 

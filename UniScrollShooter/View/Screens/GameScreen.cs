@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using View.Controls;
 using View.ScreenManagement;
+using Data;
 
 #endregion
 
@@ -41,7 +42,8 @@ namespace View.Screens
         Texture2D _shipTexture;
         private Texture2D _starTexture;
         private List<Vector2> _stars; // a hatterben elrepulo csillagok
-        GameLogic.Game _game;
+        private GameLogic.Game _game;
+        private Pilot _pilot;
 
         private Timer _musicTimer;
         private List<string> _bgMusicList;
@@ -55,11 +57,12 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GameScreen()
+        public GameScreen(Pilot pilot)
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             _stars = new List<Vector2>();
+            _pilot = pilot;
         }
 
 
@@ -78,8 +81,8 @@ namespace View.Screens
             _starTexture = _content.Load<Texture2D>("star1");
             _content.Load<SoundEffect>("Sounds/laser");
 
-            _game = new GameLogic.Game(); /*
-            _game.GameEnded += (sender, args) =>
+            _game = new GameLogic.Game(_pilot); /*
+            /*_game.GameEnded += (sender, args) =>
                 {
                     ScreenManager.RemoveScreen(this);
                     ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
