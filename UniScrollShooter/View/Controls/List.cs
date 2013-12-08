@@ -81,7 +81,7 @@ namespace View.Controls
             var top = rectangle.Top + rank * 40 + 45;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, rank + ".  " + name, topLeft, color);
-            batch.DrawString(font, score.ToString(), new Vector2(topLeft.X + 240, topLeft.Y), color);
+            batch.DrawString(font, score.ToString(), new Vector2(topLeft.X + 400, topLeft.Y), color);
         }
     }
 }
