@@ -30,10 +30,11 @@ namespace View.Controls
             }
         }
 
-        public ShopModules(Texture2D texture, Vector2 position, string text, Pilot pilot)
+        public ShopModules(Texture2D texture, SpriteFont font, Vector2 position, string text, Pilot pilot)
             : base(position)
         {
             base.Text = text;
+            base.Font = font;
             _texture = texture;
             _fm = new FileManager();
             _pilot = pilot;

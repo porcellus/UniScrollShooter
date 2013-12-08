@@ -28,7 +28,7 @@ namespace View
         // when they suddenly need to be loaded in the middle of a menu transition.
         static readonly string[] PreloadAssets =
         {
-            "blank", "button_off", "button_on", "list", "plus", "minus"
+            "blank", "button_off", "button_on", "list", "plus_off", "plus_on", "minus_off", "minus_on"
         };
 
         #endregion

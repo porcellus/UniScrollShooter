@@ -136,13 +136,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="minus.png">
-      <Name>minus</Name>
+    <Compile Include="minus_off.png">
+      <Name>minus_off</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="plus.png">
-      <Name>plus</Name>
+    <Compile Include="minus_on.png">
+      <Name>minus_on</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="plus_off.png">
+      <Name>plus_off</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="plus_on.png">
+      <Name>plus_on</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -47,9 +47,12 @@ namespace View.Screens
 
             var texture_button_off = _content.Load<Texture2D>("button_off");
             var texture_button_on = _content.Load<Texture2D>("button_on");
-            var texture_list = _content.Load<Texture2D>("list");
-            var texture_plus = _content.Load<Texture2D>("plus");
-            var texture_minus = _content.Load<Texture2D>("minus");
+            var texture_bg = _content.Load<Texture2D>("list");
+            var texture_plus_off = _content.Load<Texture2D>("plus_off");
+            var texture_plus_on = _content.Load<Texture2D>("plus_on");
+            var texture_minus_off = _content.Load<Texture2D>("minus_off");
+            var texture_minus_on = _content.Load<Texture2D>("minus_on");
+            var font = _content.Load<SpriteFont>("menufont");
 
             int width = texture_button_off.Width / 2;
             int height = texture_button_off.Height / 2;
@@ -57,18 +60,16 @@ namespace View.Screens
             int topleftX = fullscreen.Center.X - width;
             int topleftY = fullscreen.Center.Y - 100 - height;
 
-            var shopPlayer = new Controls.ShopPlayer(texture_list, texture_plus, texture_minus, new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_list.Width, fullscreen.Top + 20), "PLAYER STATS", _pilot);
-            shopPlayer.Font = _content.Load<SpriteFont>("menufont");
+            var shopPlayer = new Controls.ShopPlayer(texture_bg, texture_plus_off, texture_plus_on, texture_minus_off, texture_minus_on, font, new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_bg.Width, fullscreen.Top + 20), "PLAYER STATS", _pilot);
             _controls.Add(shopPlayer);
 
-            var shopModule = new Controls.ShopModules(texture_list, new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), "MODULES", _pilot);
-            shopModule.Font = _content.Load<SpriteFont>("menufont");
+            var shopModule = new Controls.ShopModules(texture_bg, font, new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), "MODULES", _pilot);
             _controls.Add(shopModule);
 
             var btnStart = new Controls.Button(texture_button_on, texture_button_off,
                                           new Vector2(
-                                            shopModule.Position.X + texture_list.Width - texture_button_off.Width,
-                                            shopModule.Position.Y + texture_list.Height + 20),
+                                            shopModule.Position.X + texture_bg.Width - texture_button_off.Width,
+                                            shopModule.Position.Y + texture_bg.Height + 20),
                                           "START GAME");
             btnStart.Clicked += (sender, args) =>
             {
@@ -81,7 +82,7 @@ namespace View.Screens
             var btnBack = new Controls.Button(texture_button_on, texture_button_off,
                                           new Vector2(
                                             shopPlayer.Position.X,
-                                            shopPlayer.Position.Y + texture_list.Height + 20),
+                                            shopPlayer.Position.Y + texture_bg.Height + 20),
                                           "BACK TO MAIN MENU");
             btnBack.Clicked += (sender, args) =>
             {

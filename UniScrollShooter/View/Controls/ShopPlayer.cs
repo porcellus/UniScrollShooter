@@ -15,9 +15,10 @@ namespace View.Controls
     {
         private Rectangle _bounds;
         private Texture2D _texture;
-        private Texture2D _texture_plus;
-        private Texture2D _texture_minus;
-        private FileManager _fm;
+        private Texture2D _texture_plus_off;
+        private Texture2D _texture_plus_on;
+        private Texture2D _texture_minus_off;
+        private Texture2D _texture_minus_on;
         private Pilot _pilot;
         private List<Control> _controls;
 
@@ -32,24 +33,38 @@ namespace View.Controls
             }
         }
 
-        public ShopPlayer(Texture2D texture, Texture2D texture_plus, Texture2D texture_minus, Vector2 position, string text, Pilot pilot)
+        public ShopPlayer(Texture2D texture, Texture2D texture_plus_off, Texture2D texture_plus_on, Texture2D texture_minus_off, Texture2D texture_minus_on, SpriteFont font, Vector2 position, string text, Pilot pilot)
             : base(position)
         {
             base.Text = text;
+            base.Font = font;
             _texture = texture;
-            _fm = new FileManager();
             _pilot = pilot;
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
-            _texture_plus = texture_plus;
-            _texture_minus = texture_minus;
+            _texture_plus_off = texture_plus_off;
+            _texture_plus_on = texture_plus_on;
+            _texture_minus_off = texture_minus_off;
+            _texture_minus_on = texture_minus_on;
             _controls = new List<Control>();
 
-            StatControl _testControl = new StatControl(_texture_plus, _texture_minus, new Vector2(100, 100), "STAT");
+            StatControl _testControl = new StatControl(_texture_plus_off, _texture_plus_on, _texture_minus_off, _texture_minus_on, new Vector2(100, 100), "STAT", 100);
+            _testControl.Font = this.Font;
+            _testControl.PlusClicked += (sender, args) =>
+            {
+                // Itt a pilóta megfelelő tulajdonságát fogjuk majd növelni.
+                _testControl.Value += 1;
+            };
+            _testControl.MinusClicked += (sender, args) =>
+            {
+                // Itt a pilóta megfelelő tulajdonságát fogjuk majd csökkenteni.
+                _testControl.Value -= 1;
+            };
             _controls.Add(_testControl);
         }
 
         public override void UpdateInput(InputState input)
         {
+            _controls.ForEach(a => a.UpdateInput(input));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
