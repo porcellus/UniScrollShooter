@@ -47,7 +47,14 @@ namespace View.Controls
             _texture_minus_on = texture_minus_on;
             _controls = new List<Control>();
 
-            StatControl _testControl = new StatControl(_texture_plus_off, _texture_plus_on, _texture_minus_off, _texture_minus_on, new Vector2(100, 100), "STAT", 100);
+            StatControl _testControl = new StatControl(
+                _texture_plus_off, 
+                _texture_plus_on, 
+                _texture_minus_off, 
+                _texture_minus_on, 
+                new Vector2(100, 100), 
+                "STAT", 
+                100);
             _testControl.Font = this.Font;
             _testControl.PlusClicked += (sender, args) =>
             {
@@ -90,17 +97,6 @@ namespace View.Controls
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
-        }
-
-        public static void DrawListText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color, int rank, string name, int score)
-        {
-            var size = font.MeasureString(name);
-            var textWidth = size.X;
-            var left = rectangle.Left + 10;
-            var top = rectangle.Top + rank * 40 + 45;
-            var topLeft = new Vector2(left, top);
-            batch.DrawString(font, rank + ".  " + name, topLeft, color);
-            batch.DrawString(font, score.ToString(), new Vector2(topLeft.X + 400, topLeft.Y), color);
         }
     }
 }
