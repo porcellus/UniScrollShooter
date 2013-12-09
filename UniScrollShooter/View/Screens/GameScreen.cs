@@ -232,8 +232,6 @@ namespace View.Screens
             var s = _content.Load<SpriteFont>("menufont");
             spriteBatch.DrawString(s, "Health: " + _game.pilot.Health, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y), Color.White);
             spriteBatch.DrawString(s, "Shield: " + _game.pilot.Shield, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 30), Color.White);
-            spriteBatch.DrawString(s, "DrawTime: " + gameTime.ElapsedGameTime, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 60), Color.White);
-            spriteBatch.DrawString(s, "FPS: " + (1000 / gameTime.ElapsedGameTime.TotalMilliseconds), new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 90), Color.White);
 
             spriteBatch.DrawString(s, "Experience: " + _game.pilot.Exp, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
             spriteBatch.DrawString(s, "Money: " + _game.pilot.Money, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);

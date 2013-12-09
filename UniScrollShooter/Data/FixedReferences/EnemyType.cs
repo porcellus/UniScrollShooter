@@ -28,7 +28,7 @@ namespace Data.FixedReferences
         //public:
         public static EnemyType Small
         {
-            get { return _small ?? (_small = new EnemyType(5, 4, 10, 75, 40)); }
+            get { return _small ?? (_small = new EnemyType(5, 4, 10, 100, 70)); }
         }
         public static EnemyType Medium
         {
