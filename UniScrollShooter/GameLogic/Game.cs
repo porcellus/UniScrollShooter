@@ -28,7 +28,6 @@ namespace GameLogic
         public GameState CurrState { get; private set; }
         public Input Input { get; set; }
         private Pilot _pilot;
-        private Ship _ship;
         public List<Enemy> enemies;
         public List<Bullet> bullets;
         private double _cooldown; // nem itt kene legyen
@@ -40,10 +39,9 @@ namespace GameLogic
         private Boolean _waitForLevelEnd;
         public ConcurrentQueue<GameEventType> Events { get; private set; }
 
-        public Game(Pilot pilot, Ship ship)
+        public Game(Pilot pilot)
         {
             _pilot = pilot;
-            _ship = ship;
         }
 
         public void Start()

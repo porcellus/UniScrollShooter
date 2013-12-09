@@ -82,7 +82,7 @@ namespace View.Screens
                 pilot.Init(10.0, 10.0, 172, 54);
                 Ship ship = new Ship(172, 54);
                 ScreenManager.RemoveScreen(this); 
-                ScreenManager.AddScreen(new ShopScreen(pilot, ship), ControllingPlayer); 
+                ScreenManager.AddScreen(new ShopScreen(pilot), ControllingPlayer); 
             };
             btn1.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btn1);

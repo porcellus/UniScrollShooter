@@ -14,6 +14,33 @@ namespace Data
         private Int32 _money;
         private Double _moneyMultiplier;
         private Ship _ship;
+        private int _stat1;
+        private int _stat2;
+        private int _stat3;
+
+        public Ship Ship
+        {
+            get { return _ship; }
+            set { _ship = value; }
+        }
+
+        public int stat1
+        {
+            get { return _stat1; }
+            set { _stat1 = value; }
+        }
+
+        public int stat2
+        {
+            get { return _stat2; }
+            set { _stat2 = value; }
+        }
+
+        public int stat3
+        {
+            get { return _stat3; }
+            set { _stat3 = value; }
+        }
 
         //public:
         public void Init(double x, double y, Int32 w, Int32 h)
@@ -22,6 +49,10 @@ namespace Data
             _expMultiplier = 1;
             _money = 0;
             _moneyMultiplier = 1;
+
+            _stat1 = 10;
+            _stat2 = 10;
+            _stat3 = 10;
 
             _ship = new Ship(w, h);
             _ship.posX = x;
