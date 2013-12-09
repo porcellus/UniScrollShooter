@@ -18,6 +18,7 @@ namespace View.Screens
         private ContentManager _content;
         private List<Control> _controls;
         private Pilot _pilot;
+        private Ship _ship;
 
         #endregion
 
@@ -26,11 +27,12 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ShopScreen(Pilot pilot)
+        public ShopScreen(Pilot pilot, Ship ship)
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             _controls = new List<Control>();
+            _ship = ship;
             _pilot = pilot;
         }
 
@@ -75,11 +77,13 @@ namespace View.Screens
 
             // Control to buy modules.
             var shopModule = new Controls.ShopModules(
-                texture_bg, 
+                texture_bg,
+                texture_plus_off, 
+                texture_plus_on,
                 font, 
                 new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), 
                 "MODULES", 
-                _pilot);
+                _ship);
             _controls.Add(shopModule);
 
             // Button to start the next map.
@@ -93,7 +97,7 @@ namespace View.Screens
             btnStart.Clicked += (sender, args) =>
             {
                 ScreenManager.RemoveScreen(this);
-                ScreenManager.AddScreen(new GameScreen(_pilot), ControllingPlayer);
+                ScreenManager.AddScreen(new GameScreen(_pilot, _ship), ControllingPlayer);
             };
             btnStart.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnStart);

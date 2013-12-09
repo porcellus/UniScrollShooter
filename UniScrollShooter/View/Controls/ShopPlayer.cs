@@ -47,12 +47,13 @@ namespace View.Controls
             _texture_minus_on = texture_minus_on;
             _controls = new List<Control>();
 
+            // Teszt control.
             StatControl _testControl = new StatControl(
                 _texture_plus_off, 
                 _texture_plus_on, 
                 _texture_minus_off, 
                 _texture_minus_on, 
-                new Vector2(100, 100), 
+                new Vector2(base.Position.X + 20, 100), 
                 "STAT", 
                 100);
             _testControl.Font = this.Font;

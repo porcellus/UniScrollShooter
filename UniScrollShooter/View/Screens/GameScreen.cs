@@ -44,6 +44,7 @@ namespace View.Screens
         private List<Vector2> _stars; // a hatterben elrepulo csillagok
         private GameLogic.Game _game;
         private Pilot _pilot;
+        private Ship _ship;
 
         private Timer _musicTimer;
         private List<string> _bgMusicList;
@@ -57,12 +58,13 @@ namespace View.Screens
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GameScreen(Pilot pilot)
+        public GameScreen(Pilot pilot, Ship ship)
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             _stars = new List<Vector2>();
             _pilot = pilot;
+            _ship = ship;
         }
 
 
@@ -81,7 +83,7 @@ namespace View.Screens
             _starTexture = _content.Load<Texture2D>("star1");
             _content.Load<SoundEffect>("Sounds/laser");
 
-            _game = new GameLogic.Game(_pilot); /*
+            _game = new GameLogic.Game(_pilot, _ship); /*
             /*_game.GameEnded += (sender, args) =>
                 {
                     ScreenManager.RemoveScreen(this);

@@ -6,8 +6,7 @@ using Data.FixedReferences;
 
 namespace Data
 {
-    
-    class Ship : ObjectBase
+    public class Ship : ObjectBase
     {
     //private:
         private const Int32 _shieldDEFAULT = 100;
