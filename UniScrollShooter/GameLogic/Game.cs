@@ -106,7 +106,7 @@ namespace GameLogic
                         _cooldown = 250;
                     }
 
-                    _pilot.setPosition(_pilot.posX + dx, _pilot.posY + dy);
+                    _pilot.SetPosition(_pilot.PosX + dx, _pilot.PosY + dy);
 
                     /*if (_rnd.Next(0, 100000) == 1 && enemies.Count(enemy => enemy.posX > 1500) < 10)
                     {
@@ -139,7 +139,7 @@ namespace GameLogic
                 if (enemies[i].Health <= 0)
                 {
                     //akkor kapunk ha lelőttünk egy ellenséget
-                    _pilot.money += enemies[i].value;
+                    _pilot.Money += enemies[i].value;
                     enemies.RemoveAt(i);
                     Events.Enqueue(GameEventType.EnemyDestroyed);
                 } else
@@ -159,7 +159,7 @@ namespace GameLogic
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             //játékos vége
-            if (_pilot.health <= 0)
+            if (_pilot.Health <= 0)
             {
                 enemies.Clear();
                 bullets.Clear();
@@ -188,10 +188,10 @@ namespace GameLogic
             Rectangle rectangle1;
             Rectangle rectangle2;
 
-            rectangle1 = new Rectangle((int)_pilot.posX - _pilot.width/2,
-            (int)_pilot.posY-_pilot.height/2,
-            _pilot.width,
-            _pilot.height);
+            rectangle1 = new Rectangle((int)_pilot.PosX - _pilot.Width/2,
+            (int)_pilot.PosY-_pilot.Height/2,
+            _pilot.Width,
+            _pilot.Height);
             #region ellenség vs mi ütközés
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -228,7 +228,7 @@ namespace GameLogic
                         enemies[j].Health -= bullets[i].Damage;
                         bullets[i].active = false;
                         //akkor kapunk tapasztalatot, ha eltaláltunk egy ellenséget
-                        _pilot.exp += 1;
+                        _pilot.Exp += 1;
                     }
                 }
             }
@@ -242,7 +242,7 @@ namespace GameLogic
         private void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.posX, _pilot.posY + _pilot.height / 2f-12, 65, 21, _pilot.damage, _pilot.bulletKind));
+            bullets.Add(new Bullet(_pilot.PosX, _pilot.PosY + _pilot.Height / 2f-12, 65, 21, _pilot.Damage, _pilot.BulletKind));
             Events.Enqueue(GameEventType.LaserFired);
 
         }

@@ -13,7 +13,6 @@ namespace View.Controls
 {
     class StatControl : Control
     {
-        public enum ButtonStatus { Up, Down }
         private Rectangle _bounds;
         private Rectangle _bounds_plus;
         private Rectangle _bounds_minus;
@@ -25,6 +24,8 @@ namespace View.Controls
         private int _value;
         private MouseState _state;
         private ButtonStatus _status;
+
+        public enum ButtonStatus { Up, Down }
 
         public string Text
         {
@@ -54,13 +55,26 @@ namespace View.Controls
             set
             {
                 base.Position = value;
-                _bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_plus_off.Width + _texture_minus_off.Width, _texture_plus_off.Height + _texture_minus_off.Height);
-                _bounds_plus = new Rectangle((int)base.Position.X, (int)base.Position.Y + _texture_plus_off.Height, _texture_plus_off.Width, _texture_plus_off.Height);
-                _bounds_minus = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_minus_off.Width, _texture_minus_off.Height);
+                _bounds = new Rectangle(
+                    (int)base.Position.X, 
+                    (int)base.Position.Y, 
+                    _texture_plus_off.Width, 
+                    _texture_plus_off.Height + _texture_minus_off.Height);
+                _bounds_plus = new Rectangle(
+                    (int)base.Position.X, 
+                    (int)base.Position.Y + _texture_plus_off.Height, 
+                    _texture_plus_off.Width, 
+                    _texture_plus_off.Height);
+                _bounds_minus = new Rectangle(
+                    (int)base.Position.X, 
+                    (int)base.Position.Y, 
+                    _texture_minus_off.Width, 
+                    _texture_minus_off.Height);
             }
         }
 
-        public StatControl(Texture2D texture_plus_off, Texture2D texture_plus_on, Texture2D texture_minus_off, Texture2D texture_minus_on, Vector2 position, string text, int value)
+        public StatControl(Texture2D texture_plus_off, Texture2D texture_plus_on, Texture2D texture_minus_off, 
+            Texture2D texture_minus_on, Vector2 position, string text, int value)
             : base(position)
         {
             _text = text;
@@ -69,9 +83,21 @@ namespace View.Controls
             _texture_minus_off = texture_minus_off;
             _texture_plus_on = texture_plus_on;
             _texture_minus_on = texture_minus_on;
-            _bounds = new Rectangle((int)base.Position.X, (int)base.Position.Y, _texture_plus_off.Width, _texture_plus_off.Height + _texture_minus_off.Height);
-            _bounds_plus = new Rectangle((int)base.Position.X + 450, (int)base.Position.Y, _texture_plus_off.Width, _texture_plus_off.Height);
-            _bounds_minus = new Rectangle((int)base.Position.X + 450, (int)base.Position.Y + texture_plus_off.Height, _texture_minus_off.Width, _texture_minus_off.Height);
+            _bounds = new Rectangle(
+                (int)base.Position.X, 
+                (int)base.Position.Y, 
+                _texture_plus_off.Width, 
+                _texture_plus_off.Height + _texture_minus_off.Height);
+            _bounds_plus = new Rectangle(
+                (int)base.Position.X + 450, 
+                (int)base.Position.Y, 
+                _texture_plus_off.Width,
+                _texture_plus_off.Height);
+            _bounds_minus = new Rectangle(
+                (int)base.Position.X + 450, 
+                (int)base.Position.Y + texture_plus_off.Height, 
+                _texture_minus_off.Width,
+                _texture_minus_off.Height);
         }
 
         public override void UpdateInput(InputState input)
@@ -85,8 +111,7 @@ namespace View.Controls
                     if (input.MouseState.LeftButton == ButtonState.Released && Status == ButtonStatus.Down)
                     {
                         if (PlusClicked != null)
-                        {
-                            // Fire the clicked event.        
+                        {       
                             PlusClicked(this, EventArgs.Empty);
                         }
                         Status = ButtonStatus.Up;
@@ -101,8 +126,7 @@ namespace View.Controls
                     if (input.MouseState.LeftButton == ButtonState.Released && Status == ButtonStatus.Down)
                     {
                         if (MinusClicked != null)
-                        {
-                            // Fire the clicked event.        
+                        {      
                             MinusClicked(this, EventArgs.Empty);
                         }
                         Status = ButtonStatus.Up;
@@ -119,12 +143,12 @@ namespace View.Controls
             }
         }
 
-        protected bool PlusContainsPos(Vector2 pos)
+        private bool PlusContainsPos(Vector2 pos)
         {
             return _bounds_plus.Contains((int)pos.X, (int)pos.Y);
         }
 
-        protected bool MinusContainsPos(Vector2 pos)
+        private bool MinusContainsPos(Vector2 pos)
         {
             return _bounds_minus.Contains((int)pos.X, (int)pos.Y);
         }
@@ -133,8 +157,10 @@ namespace View.Controls
         {
             if (Enabled)
             {
-                spriteBatch.Draw(PlusContainsPos(new Vector2(_state.X, _state.Y)) ? _texture_plus_on : _texture_plus_off, _bounds_plus, Color);
-                spriteBatch.Draw(MinusContainsPos(new Vector2(_state.X, _state.Y)) ? _texture_minus_on : _texture_minus_off, _bounds_minus, Color);
+                spriteBatch.Draw(
+                    PlusContainsPos(new Vector2(_state.X, _state.Y)) ? _texture_plus_on : _texture_plus_off, _bounds_plus, Color);
+                spriteBatch.Draw(
+                    MinusContainsPos(new Vector2(_state.X, _state.Y)) ? _texture_minus_on : _texture_minus_off, _bounds_minus, Color);
 
                 if (Font != null)
                 {
@@ -144,7 +170,7 @@ namespace View.Controls
             }
         }
 
-        public void DrawText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        private void DrawText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
             var textWidth = size.X;
@@ -155,7 +181,7 @@ namespace View.Controls
             batch.DrawString(font, text, topLeft, color);
         }
 
-        public void DrawValue(SpriteBatch batch, SpriteFont font, Rectangle rectangle, int value, Color color)
+        private void DrawValue(SpriteBatch batch, SpriteFont font, Rectangle rectangle, int value, Color color)
         {
             string text = value.ToString();
             var size = font.MeasureString(text);

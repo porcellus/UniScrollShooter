@@ -6,8 +6,7 @@ using Data.FixedReferences;
 
 namespace Data
 {
-    
-    class Ship : ObjectBase
+    public class Ship : ObjectBase
     {
     //private:
         private const Int32 _shieldDEFAULT = 100;
@@ -88,8 +87,8 @@ namespace Data
             else
                 Health += x;
         }
-     
-        public Int32 shield { get { return _shield; } }
+
+        public Int32 shield { get { return _shield; } set { _shield = value; } }
         public BulletKind bulletKind {  get { return _bulletkind; } }
 
         //fejlesztéshez műveletek

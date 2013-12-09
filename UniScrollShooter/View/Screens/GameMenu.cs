@@ -80,6 +80,7 @@ namespace View.Screens
             btn1.Clicked += (sender, args) => {
                 Pilot pilot = new Pilot();
                 pilot.Init(10.0, 10.0, 172, 54);
+                Ship ship = new Ship(172, 54);
                 ScreenManager.RemoveScreen(this); 
                 ScreenManager.AddScreen(new ShopScreen(pilot), ControllingPlayer); 
             };

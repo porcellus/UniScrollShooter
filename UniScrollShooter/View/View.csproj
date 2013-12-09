@@ -111,6 +111,7 @@
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\List.cs" />
+    <Compile Include="Controls\ModuleControl.cs" />
     <Compile Include="Controls\ShopModules.cs" />
     <Compile Include="Controls\ShopPlayer.cs" />
     <Compile Include="Controls\StatControl.cs" />

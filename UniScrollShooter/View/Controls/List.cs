@@ -35,7 +35,6 @@ namespace View.Controls
         {
             base.Text = text;
             _texture = texture;
-            _list = new HighscoreList();
             _fm = new FileManager();
             _list = _fm.LoadHighscoreList();
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
@@ -63,7 +62,7 @@ namespace View.Controls
             }
         }
 
-        public static void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        private static void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
             var textWidth = size.X;
@@ -73,7 +72,7 @@ namespace View.Controls
             batch.DrawString(font, text, topLeft, color);
         }
 
-        public static void DrawListText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color, int rank, string name, int score)
+        private static void DrawListText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color, int rank, string name, int score)
         {
             var size = font.MeasureString(name);
             var textWidth = size.X;

@@ -35,49 +35,53 @@ namespace Data
         }
 
         //interfész
-        public Int32 Exp 
+        public Int32 exp 
         { 
             get { return _exp; } 
             set { _exp = (int)(value*_expMultiplier); } 
         }
         
-        public Int32 Money
+        public Int32 money
         {
             get { return _money; }
             set { _money = (int)(value * _moneyMultiplier); }
         }    
 
-        public Double PosX { get { return _ship.PosX; } }
-        public Double PosY { get { return _ship.PosY; } }
+        public Double posX { get { return _ship.PosX; } }
+        public Double posY { get { return _ship.PosY; } }
 
-        public Int32 Width { get { return _ship.Width; } }
-        public Int32 Height { get { return _ship.Height; } }
+        public Int32 width { get { return _ship.Width; } }
+        public Int32 height { get { return _ship.Height; } }
 
-        public Int32 Health
+<<<<<<< HEAD
+        public Double health { get { return _ship.Health; } }
+        public Double shield { get { return _ship.shield; } }
+        public Int32 damage { get { return _ship.Damage; } }
+=======
+        public Int32 health
         { 
-            get { return _ship.Health; }
-            set { _ship.Health = value; }
+            get { return _ship.health; }
+            set { _ship.health = value; }
         }
-
-        public Int32 Shield 
+        public Int32 shield 
         {
             get { return _ship.shield; }
             set { _ship.shield = value; }
         }
-
-        public Int32 Damage 
+        public Int32 damage 
         { 
-            get { return _ship.Damage; }
-            set { _ship.Damage = value; }
+            get { return _ship.damage; }
+            set { _ship.damage = value; }
         }
 
+>>>>>>> a63e81dbeedf816de4b53385d81d4d239dff04ea
         public void DamageOnShip(Int32 x)
         {
             _ship.DoDamage(x);
         }
-        public BulletKind BulletKind { get { return _ship.bulletKind; } }
+        public BulletKind bulletKind { get { return _ship.bulletKind; } }
 
-        public void SetPosition(Double x, Double y)
+        public void setPosition(Double x, Double y)
         {
             _ship.PosX = x;
             _ship.PosY = y;

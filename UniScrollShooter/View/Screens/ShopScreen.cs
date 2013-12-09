@@ -60,17 +60,38 @@ namespace View.Screens
             int topleftX = fullscreen.Center.X - width;
             int topleftY = fullscreen.Center.Y - 100 - height;
 
-            var shopPlayer = new Controls.ShopPlayer(texture_bg, texture_plus_off, texture_plus_on, texture_minus_off, texture_minus_on, font, new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_bg.Width, fullscreen.Top + 20), "PLAYER STATS", _pilot);
+            // Control to update player.
+            var shopPlayer = new Controls.ShopPlayer(
+                texture_bg, 
+                texture_plus_off, 
+                texture_plus_on, 
+                texture_minus_off, 
+                texture_minus_on, 
+                font, 
+                new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_bg.Width, fullscreen.Top + 20), 
+                "PLAYER STATS", 
+                _pilot);
             _controls.Add(shopPlayer);
 
-            var shopModule = new Controls.ShopModules(texture_bg, font, new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), "MODULES", _pilot);
+            // Control to buy modules.
+            var shopModule = new Controls.ShopModules(
+                texture_bg,
+                texture_plus_off, 
+                texture_plus_on,
+                font, 
+                new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), 
+                "MODULES", 
+                _pilot.Ship);
             _controls.Add(shopModule);
 
-            var btnStart = new Controls.Button(texture_button_on, texture_button_off,
-                                          new Vector2(
-                                            shopModule.Position.X + texture_bg.Width - texture_button_off.Width,
-                                            shopModule.Position.Y + texture_bg.Height + 20),
-                                          "START GAME");
+            // Button to start the next map.
+            var btnStart = new Controls.Button(
+                texture_button_on,
+                texture_button_off,
+                new Vector2(
+                    shopModule.Position.X + texture_bg.Width - texture_button_off.Width,
+                    shopModule.Position.Y + texture_bg.Height + 20),
+                "START GAME");
             btnStart.Clicked += (sender, args) =>
             {
                 ScreenManager.RemoveScreen(this);
@@ -79,11 +100,12 @@ namespace View.Screens
             btnStart.Font = _content.Load<SpriteFont>("menufont");
             _controls.Add(btnStart);
 
-            var btnBack = new Controls.Button(texture_button_on, texture_button_off,
-                                          new Vector2(
-                                            shopPlayer.Position.X,
-                                            shopPlayer.Position.Y + texture_bg.Height + 20),
-                                          "BACK TO MAIN MENU");
+            // Button to quit to the main menu.
+            var btnBack = new Controls.Button(
+                texture_button_on, 
+                texture_button_off,
+                new Vector2(shopPlayer.Position.X, shopPlayer.Position.Y + texture_bg.Height + 20),
+                "BACK TO MAIN MENU");
             btnBack.Clicked += (sender, args) =>
             {
                 ScreenManager.RemoveScreen(this);

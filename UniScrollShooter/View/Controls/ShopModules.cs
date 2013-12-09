@@ -15,8 +15,11 @@ namespace View.Controls
     {
         private Rectangle _bounds;
         private Texture2D _texture;
+        private Texture2D _texture_buy_off;
+        private Texture2D _texture_buy_on;
         private FileManager _fm;
-        private Pilot _pilot;
+        private Ship _ship;
+        private List<Control>_controls;
 
         public new Vector2 Position
         {
@@ -30,19 +33,37 @@ namespace View.Controls
             }
         }
 
-        public ShopModules(Texture2D texture, SpriteFont font, Vector2 position, string text, Pilot pilot)
+        public ShopModules(Texture2D texture, Texture2D texture_buy_off, Texture2D texture_buy_on, SpriteFont font, Vector2 position, string text, Ship ship)
             : base(position)
         {
             base.Text = text;
             base.Font = font;
             _texture = texture;
+            _texture_buy_off = texture_buy_off;
+            _texture_buy_on = texture_buy_on;
             _fm = new FileManager();
-            _pilot = pilot;
+            _ship = ship;
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            _controls = new List<Control>();
+
+            // Teszt control.
+            ModuleControl _testControl = new ModuleControl(
+                _texture_buy_off,
+                _texture_buy_on,
+                new Vector2(base.Position.X + 20, 100),
+                new Module(Data.FixedReferences.ModuleKind.Core, 1));
+            _testControl.Font = this.Font;
+            _testControl.BuyClicked += (sender, args) =>
+            {
+                // Itt majd hozzáadjuk a modult a hajóhoz.
+                // _testControl.Value += 1;
+            };
+            _controls.Add(_testControl);
         }
 
         public override void UpdateInput(InputState input)
         {
+            _controls.ForEach(a => a.UpdateInput(input));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -55,6 +76,8 @@ namespace View.Controls
                 {
                     DrawCenteredText(spriteBatch, Font, _bounds, Text, Color);
                 }
+
+                _controls.ForEach(a => a.Draw(spriteBatch));
             }
         }
 
@@ -66,17 +89,6 @@ namespace View.Controls
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
-        }
-
-        public static void DrawListText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color, int rank, string name, int score)
-        {
-            var size = font.MeasureString(name);
-            var textWidth = size.X;
-            var left = rectangle.Left + 10;
-            var top = rectangle.Top + rank * 40 + 45;
-            var topLeft = new Vector2(left, top);
-            batch.DrawString(font, rank + ".  " + name, topLeft, color);
-            batch.DrawString(font, score.ToString(), new Vector2(topLeft.X + 400, topLeft.Y), color);
         }
     }
 }
