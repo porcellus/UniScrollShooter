@@ -87,8 +87,8 @@ namespace Data
             else
                 health += x;
         }
-     
-        public Int32 shield { get { return _shield; } }
+
+        public Int32 shield { get { return _shield; } set { _shield = value; } }
         public BulletKind bulletKind {  get { return _bulletkind; } }
 
         //fejlesztéshez műveletek

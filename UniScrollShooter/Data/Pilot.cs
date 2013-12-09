@@ -14,32 +14,11 @@ namespace Data
         private Int32 _money;
         private Double _moneyMultiplier;
         private Ship _ship;
-        private int _stat1;
-        private int _stat2;
-        private int _stat3;
 
         public Ship Ship
         {
             get { return _ship; }
             set { _ship = value; }
-        }
-
-        public int stat1
-        {
-            get { return _stat1; }
-            set { _stat1 = value; }
-        }
-
-        public int stat2
-        {
-            get { return _stat2; }
-            set { _stat2 = value; }
-        }
-
-        public int stat3
-        {
-            get { return _stat3; }
-            set { _stat3 = value; }
         }
 
         //public:
@@ -49,10 +28,6 @@ namespace Data
             _expMultiplier = 1;
             _money = 0;
             _moneyMultiplier = 1;
-
-            _stat1 = 10;
-            _stat2 = 10;
-            _stat3 = 10;
 
             _ship = new Ship(w, h);
             _ship.posX = x;
@@ -78,9 +53,22 @@ namespace Data
         public Int32 width { get { return _ship.width; } }
         public Int32 height { get { return _ship.height; } }
 
-        public Double health { get { return _ship.health; } }
-        public Double shield { get { return _ship.shield; } }
-        public Int32 damage { get { return _ship.damage; } }
+        public Int32 health
+        { 
+            get { return _ship.health; }
+            set { _ship.health = value; }
+        }
+        public Int32 shield 
+        {
+            get { return _ship.shield; }
+            set { _ship.shield = value; }
+        }
+        public Int32 damage 
+        { 
+            get { return _ship.damage; }
+            set { _ship.damage = value; }
+        }
+
         public void DamageOnShip(Int32 x)
         {
             _ship.DoDamage(x);

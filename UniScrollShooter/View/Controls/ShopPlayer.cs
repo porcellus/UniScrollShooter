@@ -47,71 +47,101 @@ namespace View.Controls
             _texture_minus_on = texture_minus_on;
             _controls = new List<Control>();
 
-            // Stat1 control.
-            StatControl _stat1Control = new StatControl(
+            // Damage control.
+            StatControl _damageControl = new StatControl(
                 _texture_plus_off, 
                 _texture_plus_on, 
                 _texture_minus_off, 
                 _texture_minus_on, 
-                new Vector2(base.Position.X + 20, 100), 
-                "STAT1", 
-                _pilot.stat1);
-            _stat1Control.Font = this.Font;
-            _stat1Control.PlusClicked += (sender, args) =>
+                new Vector2(base.Position.X + 20, 160), 
+                "DAMAGE", 
+                _pilot.damage);
+            _damageControl.Font = this.Font;
+            _damageControl.PlusClicked += (sender, args) =>
             {
-                _pilot.stat1 += 1;
-                _stat1Control.Value += 1;
+                int price = DamagePrice(_pilot.damage);
+                if (_pilot.exp - price >= 0)
+                {
+                    _pilot.damage += 1;
+                    _damageControl.Value += 1;
+                    _pilot.exp -= price;
+                }
             };
-            _stat1Control.MinusClicked += (sender, args) =>
+            _damageControl.MinusClicked += (sender, args) =>
             {
-                _pilot.stat1 -= 1;
-                _stat1Control.Value -= 1;
+                int price = DamagePrice(_pilot.damage - 1);
+                if (_pilot.damage > 1)
+                {
+                    _pilot.damage -= 1;
+                    _damageControl.Value -= 1;
+                    _pilot.exp += price;
+                }
             };
-            _controls.Add(_stat1Control);
+            _controls.Add(_damageControl);
 
-            // Stat2 control.
-            StatControl _stat2Control = new StatControl(
+            // Health control.
+            StatControl _healthControl = new StatControl(
                 _texture_plus_off,
                 _texture_plus_on,
                 _texture_minus_off,
                 _texture_minus_on,
-                new Vector2(base.Position.X + 20, 180),
-                "STAT2",
-                _pilot.stat2);
-            _stat2Control.Font = this.Font;
-            _stat2Control.PlusClicked += (sender, args) =>
+                new Vector2(base.Position.X + 20, 240),
+                "HEALTH",
+                _pilot.health);
+            _healthControl.Font = this.Font;
+            _healthControl.PlusClicked += (sender, args) =>
             {
-                _pilot.stat2 += 1;
-                _stat2Control.Value += 1;
+                int price = HealthPrice(_pilot.health);
+                if (_pilot.exp - price >= 0)
+                {
+                    _pilot.health += 1;
+                    _healthControl.Value += 1;
+                    _pilot.exp -= price;
+                }
             };
-            _stat2Control.MinusClicked += (sender, args) =>
+            _healthControl.MinusClicked += (sender, args) =>
             {
-                _pilot.stat2 -= 1;
-                _stat2Control.Value -= 1;
+                int price = HealthPrice(_pilot.health - 1);
+                if (_pilot.health > 1)
+                {
+                    _pilot.health -= 1;
+                    _healthControl.Value -= 1;
+                    _pilot.exp += price;
+                }
             };
-            _controls.Add(_stat2Control);
+            _controls.Add(_healthControl);
 
-            // Stat3 control.
-            StatControl _stat3Control = new StatControl(
+            // Shield control.
+            StatControl _shieldControl = new StatControl(
                 _texture_plus_off,
                 _texture_plus_on,
                 _texture_minus_off,
                 _texture_minus_on,
-                new Vector2(base.Position.X + 20, 260),
-                "STAT3",
-                _pilot.stat3);
-            _stat3Control.Font = this.Font;
-            _stat3Control.PlusClicked += (sender, args) =>
+                new Vector2(base.Position.X + 20, 320),
+                "SHIELD",
+                _pilot.shield);
+            _shieldControl.Font = this.Font;
+            _shieldControl.PlusClicked += (sender, args) =>
             {
-                _pilot.stat3 += 1;
-                _stat3Control.Value += 1;
+                int price = ShieldPrice(_pilot.shield);
+                if (_pilot.exp - price >= 0)
+                {
+                    _pilot.shield += 1;
+                    _shieldControl.Value += 1;
+                    _pilot.exp -= price;
+                }
             };
-            _stat3Control.MinusClicked += (sender, args) =>
+            _shieldControl.MinusClicked += (sender, args) =>
             {
-                _pilot.stat3 -= 1;
-                _stat3Control.Value -= 1;
+                int price = ShieldPrice(_pilot.shield - 1);
+                if (_pilot.shield > 0)
+                {
+                    _pilot.shield -= 1;
+                    _shieldControl.Value -= 1;
+                    _pilot.exp += price;
+                }
             };
-            _controls.Add(_stat3Control);
+            _controls.Add(_shieldControl);
         }
 
         public override void UpdateInput(InputState input)
@@ -128,13 +158,14 @@ namespace View.Controls
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, _bounds, Text, Color);
+                    DrawExpRow(spriteBatch, Font, _bounds, Color);
                 }
 
                 _controls.ForEach(a => a.Draw(spriteBatch));
             }
         }
 
-        public static void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        private void DrawCenteredText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
             var textWidth = size.X;
@@ -142,6 +173,33 @@ namespace View.Controls
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
+        }
+
+        private void DrawExpRow(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color)
+        {
+            string textExp = "EXPERIENCE: " + _pilot.exp;
+            var size = font.MeasureString(textExp);
+            var textWidth = size.X;
+            var textHeight = size.Y;
+            var left = rectangle.Left + 20;
+            var top = rectangle.Top + 80;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, textExp, topLeft, color);
+        }
+
+        private int DamagePrice(int damage)
+        {
+            return (damage / 5) * 100;
+        }
+
+        private int HealthPrice(int health)
+        {
+            return (health / 10) * 10;
+        }
+
+        private int ShieldPrice(int shield)
+        {
+            return (shield / 10) * 10;
         }
     }
 }
