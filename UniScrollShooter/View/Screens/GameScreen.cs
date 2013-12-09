@@ -81,12 +81,7 @@ namespace View.Screens
             _starTexture = _content.Load<Texture2D>("star1");
             _content.Load<SoundEffect>("Sounds/laser");
 
-            _game = new GameLogic.Game(_pilot); /*
-            /*_game.GameEnded += (sender, args) =>
-                {
-                    ScreenManager.RemoveScreen(this);
-                    ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
-                };*/
+            _game = new GameLogic.Game(_pilot); 
 
             var rnd = new Random();
             for (int i = 0; i < 100; ++i)
@@ -95,7 +90,7 @@ namespace View.Screens
 
             _bgMusicList = new List<string> {"Sounds/01"};
             _bgMusicIndex = 0;
-
+            /*
             _musicTimer = new Timer(state =>
             {
                                                 _bgMusicIndex = (_bgMusicIndex + 1) % _bgMusicList.Count;
@@ -103,12 +98,13 @@ namespace View.Screens
                                                 _musicTimer.Change((int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds,
                                                                (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
             }, null, 0, (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
+             */
         }
 
 
         /// <summary>
         /// Unloads graphics content for this screen.
-        /// </summary>
+        /// </summary>  
         public override void UnloadContent()
         {
             _content.Unload();
@@ -133,6 +129,32 @@ namespace View.Screens
             if (_stars.Count < 150 && rnd.Next(0, 100) > 70)
             {
                 _stars.Add(new Vector2(1 + rnd.Next(0, 25) / 100f, rnd.Next(0, 100) / 100f));
+            }
+
+            GameEventType ev;
+            while (_game.Events.TryDequeue(out ev))
+            {
+                switch (ev)
+                {
+                    case GameEventType.LaserFired:
+                        //_content.Load<SoundEffect>("Sounds/laser").Play();
+                        break;
+                    case GameEventType.EnemyDestroyed:
+                        //_content.Load<SoundEffect>("Sounds/explosion_small").Play();
+                        break;
+                    case GameEventType.LevelEnd:
+                        ScreenManager.AddScreen(new ShopScreen(_pilot), ControllingPlayer);
+                        ScreenManager.RemoveScreen(this);
+                        return;
+                    case GameEventType.PlayerDead:
+                        /*
+                        var sFont = _content.Load<SpriteFont>("menufont");
+                        spriteBatch.DrawString(sFont, "GAME OVER", new Vector2(viewport.X + viewport.Width / 2, viewport.Y + viewport.Height / 2), Color.White);
+                         */
+                        ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
+                        ScreenManager.RemoveScreen(this);
+                        return;
+                }
             }
         }
 
@@ -166,6 +188,18 @@ namespace View.Screens
             }
         }
 
+        private static void drawCentered(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, float rotation = 0, float scale = 1)
+        {
+            var cx = texture.Width/2;
+            var cy = texture.Height/2;
+
+            var cpos = new Vector2(pos.X - cx, pos.Y - cy);
+
+            spriteBatch.Draw(texture, cpos, texture.Bounds, Color.White, rotation, new Vector2(0,0), scale, SpriteEffects.None, 0);
+        }
+
+        private DateTime lastDraw;
+
         /// <summary>
         /// Draws the screen calling every controls Draw.
         /// </summary>
@@ -186,56 +220,29 @@ namespace View.Screens
                 spriteBatch.Draw(_starTexture, new Vector2(star.X*fullscreen.Width, star.Y*fullscreen.Height),
                                  Color.White);
 
-            try
-            {
-                foreach (var enemy in _game.enemies.Where(en => en.posX > 0 && en.posY > 0 && en.posX < fullscreen.Width && en.posY < fullscreen.Height))
-                    spriteBatch.Draw(enemySp, new Vector2((float)enemy.posX, (float)enemy.posY), Color.White);
-            
+            foreach (var enemy in _game.enemies.Where(en => en.PosX > 0 && en.PosY > 0 && en.PosX < fullscreen.Width && en.PosY < fullscreen.Height).ToList())
+                drawCentered(spriteBatch, enemySp, new Vector2((float)enemy.PosX, (float)enemy.PosY));
 
-                    foreach (var bullet in _game.bullets.Where(bul => bul.posX > 0 && bul.posY > 0 && bul.posX < fullscreen.Width && bul.posY < fullscreen.Height))
-                        spriteBatch.Draw(lsRedSp, new Vector2((float) bullet.posX, (float) bullet.posY), lsRedSp.Bounds,
-                                         Color.White,
-                                         bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0, new Vector2(0, 0), 1,
-                                         SpriteEffects.None, 0f);
-            } catch
-            {}
-            GameEventType ev;
-            while (_game.Events.TryDequeue(out ev))
-            {
-                switch (ev)
-                {
-                    case GameEventType.LaserFired:
-                        _content.Load<SoundEffect>("Sounds/laser").Play();
-                        break;
-                    case GameEventType.EnemyDestroyed:
-                        _content.Load<SoundEffect>("Sounds/explosion_small").Play();
-                        break;
-                    case GameEventType.LevelEnd:
-                        //shopscreen vagy valami betöltése
-                        break;
-                    case GameEventType.PlayerDead:
-                        //toplista vagy valami
-                        //SpriteFont sFont = _content.Load<SpriteFont>("menufont");
-                        //spriteBatch.DrawString(sFont, "GAME OVER", new Vector2(viewport.X + viewport.Width/2, viewport.Y + viewport.Height/2), Color.White);
-                        break;
-                }
-            }
+
+            foreach (var bullet in _game.bullets.Where(bul => bul.PosX > 0 && bul.PosY > 0 && bul.PosX < fullscreen.Width && bul.PosY < fullscreen.Height).ToList())
+                drawCentered(spriteBatch, lsRedSp, new Vector2((float)bullet.PosX, (float)bullet.PosY),
+                                    bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0);
 
             //tulajdonság kiírások (élet, pajzs, tapasztalat, pénz, szint)
-            SpriteFont s = _content.Load<SpriteFont>("menufont");
-            spriteBatch.DrawString(s, "Health: "+_game.pilot.health, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y), Color.White);
+            var s = _content.Load<SpriteFont>("menufont");
+            spriteBatch.DrawString(s, "Health: " + _game.pilot.health, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y), Color.White);
             spriteBatch.DrawString(s, "Shield: " + _game.pilot.shield, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 30), Color.White);
+            spriteBatch.DrawString(s, "DrawTime: " + gameTime.ElapsedGameTime, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 60), Color.White);
+            spriteBatch.DrawString(s, "FPS: " + (1000 / gameTime.ElapsedGameTime.TotalMilliseconds), new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + 90), Color.White);
 
             spriteBatch.DrawString(s, "Experience: " + _game.pilot.exp, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
             spriteBatch.DrawString(s, "Money: " + _game.pilot.money, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
 
             spriteBatch.DrawString(s, "Level: " + _game.level, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y), Color.WhiteSmoke);
             //
-            
+
             var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
             spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
-
-
             spriteBatch.End();
         }
 

@@ -11,7 +11,7 @@ namespace Data
         Laser, Exploded, Rocket
     }
 
-    public class Bullet : ObjectBase
+    public sealed class Bullet : ObjectBase
     {
         //private:
         public Boolean _active; 
@@ -23,10 +23,10 @@ namespace Data
         //public:
         public Bullet(Double x_, Double y_, Int32 width_, Int32 height_, Int32 damage_, BulletKind kind_)
         {
-            posX = x_;
-            posY = y_;
-            width = width_;
-            height = height_;
+            PosX = x_;
+            PosY = y_;
+            Width = width_;
+            Height = height_;
             switch (kind_)
             {
                 case BulletKind.Laser:
@@ -45,7 +45,7 @@ namespace Data
                         break;
                     }
             }
-            damage = damage_+_type._bonusdamage;
+            Damage = damage_+_type._bonusdamage;
             _active = true;
 
             _vx = 1; _vy = 0;
@@ -54,8 +54,8 @@ namespace Data
 
         public void Move(double elapsedTime)
         {
-            posX += _vx * _speed * elapsedTime / 20;
-            posY += _vy * _speed * elapsedTime / 20;
+            PosX += _vx * _speed * elapsedTime / 20;
+            PosY += _vy * _speed * elapsedTime / 20;
         }
 
         public Boolean active

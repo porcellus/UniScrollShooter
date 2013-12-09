@@ -27,10 +27,10 @@ namespace Data
                     _shield += (int)(_shieldDEFAULT * (m.bonus / 100));
                     break;
                 case ModuleKind.Gun:
-                    damage = (int)(_type.basedamage * (m.bonus / 100));
+                    Damage = (int)(_type.basedamage * (m.bonus / 100));
                     break;
                 case ModuleKind.Core:
-                    health = (int)(_healthDEFAULT * (m.bonus / 100));
+                    Health = (int)(_healthDEFAULT * (m.bonus / 100));
                     break;
             }
         }
@@ -44,10 +44,10 @@ namespace Data
                     _shield -= (int)(_shieldDEFAULT * (m.bonus / 100));
                     break;
                 case ModuleKind.Gun:
-                    damage -= (int)(_type.basedamage * (m.bonus / 100));
+                    Damage -= (int)(_type.basedamage * (m.bonus / 100));
                     break;
                 case ModuleKind.Core:
-                    health -= (int)(_healthDEFAULT * (m.bonus / 100));
+                    Health -= (int)(_healthDEFAULT * (m.bonus / 100));
                     break;
             }
         }
@@ -55,12 +55,12 @@ namespace Data
     //public:
         public Ship(Int32 width_, Int32 height_)
         {
-            health = 100;
+            Health = 100;
             _shield = 100;
             _type = ShipType.SmallShip;
-            width = width_;
-            height = height_;
-            damage = _type.basedamage;
+            Width = width_;
+            Height = height_;
+            Damage = _type.basedamage;
             _bulletkind = BulletKind.Laser;
             _modules = new Dictionary<ModuleKind, Module>();
         }
@@ -71,22 +71,22 @@ namespace Data
                 _shield -= x;
             else
             {
-                health -= x-_shield;
-                if (health < 0)
-                    health = 0;
+                Health -= x-_shield;
+                if (Health < 0)
+                    Health = 0;
                 _shield = 0;
             }
         }
 
         public void IncreaseDurability(int x)
         {
-            if (health + x > 100)
+            if (Health + x > 100)
             {
-                _shield += health + x - 100;
-                health = 100;
+                _shield += Health + x - 100;
+                Health = 100;
             }
             else
-                health += x;
+                Health += x;
         }
      
         public Int32 shield { get { return _shield; } }
@@ -97,14 +97,14 @@ namespace Data
         {
             //true->sikeres fejlesztés, false->nem az
             //ha fejlesztek, minden modul elveszik és a tulajdonságok frissül amit Shipekből nyerek
-            damage -= _type.basedamage;
+            Damage -= _type.basedamage;
             if (_type.id == 0)
                 _type = ShipType.MediumShip;
             else
                 if (_type.id == 1)
                     _type = ShipType.BigShip;
             else return false;
-            damage += _type.basedamage;
+            Damage += _type.basedamage;
 
             foreach (ModuleKind mk in _modules.Keys)
                 RemoveModulEffect(mk);
@@ -121,7 +121,7 @@ namespace Data
 
         public void UpgradeHealth(Int32 x)
         {
-            health += x;
+            Health += x;
         }
 
         public void UpgradeBullet(BulletKind x)
@@ -131,7 +131,7 @@ namespace Data
 
         public void UpgradeDamage(Int32 x)
         {
-            damage += x;
+            Damage += x;
         }
 
         public void AddModule(ModuleKind k, Int32 size)

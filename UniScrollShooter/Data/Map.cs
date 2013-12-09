@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Data.FixedReferences;
 
 namespace Data
 {
@@ -9,7 +10,7 @@ namespace Data
     {
         private Int32 _mobcountBase = 140;
         private Double _timeBase = 750;
-        private List<Double> _probs;
+        private Dictionary<EnemyType,Double> _probs;
         private Int32 _level;
         private Double _ellapsedTime;
         private Int32 _mobsOnLevel;
@@ -18,31 +19,25 @@ namespace Data
         public MapGenerator()
         {
             _level = 1;
-            _probs = new List<Double>();
+            _probs = new Dictionary<EnemyType, double>();
             LevelInit();
             _ellapsedTime = 0;
             _mobsOnLevel = 0;
         }
         public Int32 level { get { return _level; } }
 
-        private Double Probablity(EnemyKind kind)
+        private Double Probablity(EnemyType kind)
         {
             Double result = 0.0;
-            switch (kind)
-            {
-                //lineáris csökken, 90->0
-                case EnemyKind.Small:
-                    result = 100 - (10 * _level);
-                    break;
-                //másik kettő alapján a maradék valószínűség, az 5. körig nő, majd csökken, 10->26->0
-                case EnemyKind.Medium:
-                    result = (10-_level) * _level + 1;
-                    break;
-                //exponenciálisan nő, 0->99
-                case EnemyKind.Big:
-                    result = (_level*_level) - 1;
-                    break;
-            }
+            //lineáris csökken, 90->0
+            if(kind==EnemyType.Small)
+                result = 100 - (10 * _level);
+            //másik kettő alapján a maradék valószínűség, az 5. körig nő, majd csökken, 10->26->0
+            if(kind==EnemyType.Medium)
+                result = (10-_level) * _level + 1;
+            //exponenciálisan nő, 0->99
+            if(kind==EnemyType.Big)
+                result = (_level*_level) - 1;
 
             return result/100;
         }
@@ -57,24 +52,25 @@ namespace Data
             return _timeBase - (_level * 50);
         }
 
-        public EnemyKind NewEnemyType()
+        public EnemyType NewEnemyType()
         {
-            Random rand = new Random(DateTime.Now.Millisecond);
-            Double r = rand.NextDouble();
+            var rand = new Random(DateTime.Now.Millisecond);
+            var r = rand.NextDouble();
             Double sum = 0;
-            for (Int32 i = _probs.Count-1; i >= 0; --i)
+            
+            foreach(var prob in _probs)
             {
-                sum += _probs[i];
+                sum += prob.Value;
                 if (r <= sum)
                 {
                     ++_mobsOnLevel;
                     _ellapsedTime = 0;
-                    return (EnemyKind)i;
+                    return prob.Key;
                 }
             }
             ++_mobsOnLevel;
             _ellapsedTime = 0;
-            return EnemyKind.Small;
+            return EnemyType.Small;
         }
 
         public Boolean AbleToCreateNewEnemy(Double ellapsedtime)
@@ -84,22 +80,20 @@ namespace Data
                 _ellapsedTime += ellapsedtime;
                 return _ellapsedTime >= SpawnTime();
             }
-            else
-            {
-                _ellapsedTime = 0;
-                ++_level;
-                LevelInit();
-                LevelUp(this, new EventArgs());
-            }
+
+            _ellapsedTime = 0;
+            ++_level;
+            LevelInit();
+            LevelUp(this, new EventArgs());
             return false;
         }
 
         private void LevelInit()
         {
             _probs.Clear();
-            _probs.Add(Probablity(EnemyKind.Small));
-            _probs.Add(Probablity(EnemyKind.Medium));
-            _probs.Add(Probablity(EnemyKind.Big));
+            _probs.Add(EnemyType.Small,Probablity(EnemyType.Small));
+            _probs.Add(EnemyType.Medium,Probablity(EnemyType.Medium));
+            _probs.Add(EnemyType.Big,Probablity(EnemyType.Big));
         }
     }
 }

@@ -136,7 +136,7 @@ namespace GameLogic
         {
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
-                if (enemies[i].health <= 0)
+                if (enemies[i].Health <= 0)
                 {
                     //akkor kapunk ha lelőttünk egy ellenséget
                     _pilot.money += enemies[i].value;
@@ -145,14 +145,14 @@ namespace GameLogic
                 } else
                 {
                     enemies[i].Move(elapsedTime);
-                    if (enemies[i].posX < 0)
+                    if (enemies[i].PosX < 0)
                         enemies.RemoveAt(i);
                 }
                 // TODO: ellenőrzés pályán vagyunk-e még
             }
             for (int i = 0; i < bullets.Count; ++i)
-            {
-                if (!bullets[i].active || bullets[i].posX>2000)
+            { 
+                if (!bullets[i].active || bullets[i].PosX>2000)
                     bullets.RemoveAt(i);
                 else
                     bullets[i].Move(elapsedTime);
@@ -167,7 +167,7 @@ namespace GameLogic
                 _exiting++;
             }
             //pálya vége
-            if (enemies.Count == 0 && _waitForLevelEnd==true)
+            if (enemies.Count == 0 && _waitForLevelEnd)
             {
                 Events.Enqueue(GameEventType.LevelEnd);
                 enemies.Clear();
@@ -195,15 +195,15 @@ namespace GameLogic
             #region ellenség vs mi ütközés
             for (int i = 0; i < enemies.Count; i++)
             {
-                rectangle2 = new Rectangle((int)enemies[i].posX,
-                (int)enemies[i].posY,
-                enemies[i].width,
-                enemies[i].height);
+                rectangle2 = new Rectangle((int)enemies[i].PosX,
+                (int)enemies[i].PosY,
+                enemies[i].Width,
+                enemies[i].Height);
 
                 if (rectangle1.Intersects(rectangle2))
                 {
-                    _pilot.DamageOnShip(enemies[i].damage);
-                    enemies[i].health = 0;
+                    _pilot.DamageOnShip(enemies[i].Damage);
+                    enemies[i].Health = 0;
                 }
             }
             #endregion
@@ -213,17 +213,19 @@ namespace GameLogic
             {
                 for (int j = 0; j < enemies.Count; j++)
                 {
-                    rectangle1 = new Rectangle((int)bullets[i].posX -
-                    bullets[i].width / 2, (int)bullets[i].posY -
-                    bullets[i].height / 2, bullets[i].width, bullets[i].height);
+                    rectangle1 = new Rectangle(
+                        (int)bullets[i].PosX - bullets[i].Width / 2,
+                        (int)bullets[i].PosY - bullets[i].Height / 2,
+                        bullets[i].Width, bullets[i].Height);
 
-                    rectangle2 = new Rectangle((int)enemies[j].posX - enemies[j].width / 2,
-                    (int)enemies[j].posY - enemies[j].height / 2,
-                    enemies[j].width, enemies[j].height);
+                    rectangle2 = new Rectangle(
+                        (int)enemies[j].PosX - enemies[j].Width / 2,
+                        (int)enemies[j].PosY - enemies[j].Height / 2,
+                        enemies[j].Width, enemies[j].Height);
 
                     if (rectangle1.Intersects(rectangle2))
                     {
-                        enemies[j].health -= bullets[i].damage;
+                        enemies[j].Health -= bullets[i].Damage;
                         bullets[i].active = false;
                         //akkor kapunk tapasztalatot, ha eltaláltunk egy ellenséget
                         _pilot.exp += 1;
@@ -240,16 +242,16 @@ namespace GameLogic
         private void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.posX + _pilot.width, _pilot.posY + _pilot.height / 2f-12, 65, 21, _pilot.damage, _pilot.bulletKind));
+            bullets.Add(new Bullet(_pilot.posX, _pilot.posY + _pilot.height / 2f-12, 65, 21, _pilot.damage, _pilot.bulletKind));
             Events.Enqueue(GameEventType.LaserFired);
 
         }
 
         //új ellenség
-        private void CreateNewEnemy(EnemyKind kind)
+        private void CreateNewEnemy(EnemyType type)
         {
             //típus, koordináták, méretek
-            enemies.Add(new Enemy(2000+_rnd.Next(-100,100), _rnd.Next(100,700), 128, 61, kind));
+            enemies.Add(new Enemy(2000+_rnd.Next(-100,100), _rnd.Next(100,700), type));
         }
         #endregion
 

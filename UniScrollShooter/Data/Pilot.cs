@@ -24,8 +24,8 @@ namespace Data
             _moneyMultiplier = 1;
 
             _ship = new Ship(w, h);
-            _ship.posX = x;
-            _ship.posY = y;
+            _ship.PosX = x;
+            _ship.PosY = y;
         }
 
         //interfész
@@ -41,15 +41,15 @@ namespace Data
             set { _money = (int)(value * _moneyMultiplier); }
         }    
 
-        public Double posX { get { return _ship.posX; } }
-        public Double posY { get { return _ship.posY; } }
+        public Double posX { get { return _ship.PosX; } }
+        public Double posY { get { return _ship.PosY; } }
 
-        public Int32 width { get { return _ship.width; } }
-        public Int32 height { get { return _ship.height; } }
+        public Int32 width { get { return _ship.Width; } }
+        public Int32 height { get { return _ship.Height; } }
 
-        public Double health { get { return _ship.health; } }
+        public Double health { get { return _ship.Health; } }
         public Double shield { get { return _ship.shield; } }
-        public Int32 damage { get { return _ship.damage; } }
+        public Int32 damage { get { return _ship.Damage; } }
         public void DamageOnShip(Int32 x)
         {
             _ship.DoDamage(x);
@@ -58,8 +58,8 @@ namespace Data
 
         public void setPosition(Double x, Double y)
         {
-            _ship.posX = x;
-            _ship.posY = y;
+            _ship.PosX = x;
+            _ship.PosY = y;
         }
 
         //pilóta: fejlesztéshez

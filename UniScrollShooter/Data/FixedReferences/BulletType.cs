@@ -24,7 +24,7 @@ namespace Data.FixedReferences
         //public:
         public static BulletType Laser
         {
-            get { return _laser ?? (_laser = new BulletType(15, 0)); }
+            get { return _laser ?? (_laser = new BulletType(15, 15)); }
         }
         public static BulletType Exploded
         {
