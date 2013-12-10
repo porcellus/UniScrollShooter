@@ -210,7 +210,9 @@ namespace View.Screens
 
             spriteBatch.Begin();
             //var blankSp = _content.Load<Texture2D>("blank");
-            var enemySp = _content.Load<Texture2D>("enemy_spaceship");
+            var enemySpSmall = _content.Load<Texture2D>("enemy_spaceship");
+            var enemySpMedium = _content.Load<Texture2D>("alien2");
+            var enemySpBig = _content.Load<Texture2D>("alien1");
             var lsRedSp = _content.Load<Texture2D>("laserbeam_red");
             var lsBlueSp = _content.Load<Texture2D>("laserbeam_blue");
             //spriteBatch.Draw(blankSp, fullscreen, Color.Black);
@@ -220,7 +222,14 @@ namespace View.Screens
                                  Color.White);
 
             foreach (var enemy in _game.enemies.Where(en => en.PosX > 0 && en.PosY > 0 && en.PosX < fullscreen.Width && en.PosY < fullscreen.Height).ToList())
-                drawCentered(spriteBatch, enemySp, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+            {
+                if(enemy.Type == Data.FixedReferences.EnemyType.Small)
+                    drawCentered(spriteBatch, enemySpSmall, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+                else if (enemy.Type == Data.FixedReferences.EnemyType.Medium)
+                    drawCentered(spriteBatch, enemySpMedium, new Vector2((float)enemy.PosX, (float)enemy.PosY), 0, 1.5f);
+                else if (enemy.Type == Data.FixedReferences.EnemyType.Big)
+                    drawCentered(spriteBatch, enemySpBig, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+            }
 
 
             foreach (var bullet in _game.bullets.Where(bul => bul.PosX > 0 && bul.PosY > 0 && bul.PosX < fullscreen.Width && bul.PosY < fullscreen.Height).ToList())

@@ -11,7 +11,7 @@ namespace Data
         //private:
         private Double _vx;         //irányvektor
         private Double _vy;
-        private readonly EnemyType _type;
+        public EnemyType Type { get; private set; }
 
         //public:
         public Enemy(Double x, Double y, EnemyType type)
@@ -21,20 +21,20 @@ namespace Data
             PosY = y;
             _vx = -0.5;
             _vy = 0;
-            _type = type;
+            Type = type;
 
-            Damage = _type.damage;
+            Damage = Type.damage;
         }
         
         public Int32 value
         {
-            get { return _type.value; }
+            get { return Type.value; }
         }
 
         public void Move(double elapsedTime)
         {
-            PosX += _type.speed * _vx * elapsedTime / 20;
-            PosX += _type.speed * _vy * elapsedTime / 20;
+            PosX += Type.speed * _vx * elapsedTime / 20;
+            PosX += Type.speed * _vy * elapsedTime / 20;
         }
     }
 }
