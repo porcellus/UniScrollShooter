@@ -114,9 +114,8 @@ namespace View.Controls
                 if (Font != null)
                 {
                     DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "Upgrade to level " + (_module.size + 1), Color);
-                    DrawHint(spriteBatch, HintFont, _bounds, "Current level:\n    " + _module.Hint(), Color.Yellow);
-                    DrawNextHerald(spriteBatch, HintFont, _bounds, "Next level:\n    " + _module.NextLevelHerald(), Color.LimeGreen);
-                    //DrawText(spriteBatch, Font, _bounds, _module.Hint(), Color);
+                    DrawHint(spriteBatch, HintFont, _bounds, "Current: level "+_module.size+"\n    " + _module.Hint(), Color.Yellow);
+                    DrawNextHerald(spriteBatch, HintFont, _bounds, "Next: level "+_module.size+"\n    " + _module.NextLevelHerald(), Color.LimeGreen);
                 }
             }
         }

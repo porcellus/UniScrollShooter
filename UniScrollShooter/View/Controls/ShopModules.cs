@@ -18,7 +18,7 @@ namespace View.Controls
         private Texture2D _texture_buy_off;
         private Texture2D _texture_buy_on;
         private FileManager _fm;
-        private Ship _ship;
+        private Pilot _pilot;
         private List<Control>_controls;
 
         public new Vector2 Position
@@ -33,7 +33,7 @@ namespace View.Controls
             }
         }
 
-        public ShopModules(Texture2D texture, Texture2D texture_buy_off, Texture2D texture_buy_on, SpriteFont font, SpriteFont hintFont, Vector2 position, string text, Ship ship)
+        public ShopModules(Texture2D texture, Texture2D texture_buy_off, Texture2D texture_buy_on, SpriteFont font, SpriteFont hintFont, Vector2 position, string text, Pilot pilot)
             : base(position)
         {
             base.Text = text;
@@ -42,42 +42,28 @@ namespace View.Controls
             _texture_buy_off = texture_buy_off;
             _texture_buy_on = texture_buy_on;
             _fm = new FileManager();
-            _ship = ship;
+            _pilot = pilot;
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             _controls = new List<Control>();
 
             int count = 0;
-            foreach (Module module in _ship.GetModuleList())
+            foreach (Module module in _pilot.Ship.GetModuleList())
             {
+                Module currentModule = _pilot.Ship.GetModuleList()[count];
                 ModuleControl _moduleControl = new ModuleControl(
                     _texture_buy_off,
                     _texture_buy_on,
-                    new Vector2(base.Position.X + 20, 100 + 120*count),
-                    _ship.GetModuleList()[count]);
+                    new Vector2(base.Position.X + 20, 160 + 120 * count),
+                    currentModule);
                 _moduleControl.Font = Font;
                 _moduleControl.BuyClicked += (sender, args) =>
                 {
-                    //_ship.
+                    currentModule.UpgradeModul();
                 };
                 _moduleControl.HintFont = hintFont;
                 _controls.Add(_moduleControl);
                 count++;
             }
-
-            /*
-            ModuleControl _bulletControl = new ModuleControl(
-                    _texture_buy_off,
-                    _texture_buy_on,
-                    new Vector2(base.Position.X + 20, 100 + 50 * count),
-                    _ship.);
-            _bulletControl.Font = this.Font;
-            _bulletControl.BuyClicked += (sender, args) =>
-            {
-                //_ship.
-            };
-            _controls.Add(_bulletControl);
-            */
-
         }
 
         public override void UpdateInput(InputState input)
@@ -94,6 +80,7 @@ namespace View.Controls
                 if (Font != null)
                 {
                     DrawCenteredText(spriteBatch, Font, _bounds, Text, Color);
+                    DrawMoneyRow(spriteBatch, Font, _bounds, Color);
                 }
 
                 _controls.ForEach(a => a.Draw(spriteBatch));
@@ -108,6 +95,18 @@ namespace View.Controls
             var top = rectangle.Top + 20;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
+        }
+
+        private void DrawMoneyRow(SpriteBatch batch, SpriteFont font, Rectangle rectangle, Color color)
+        {
+            string textExp = "MONEY: " + _pilot.Money;
+            var size = font.MeasureString(textExp);
+            var textWidth = size.X;
+            var textHeight = size.Y;
+            var left = rectangle.Left + 20;
+            var top = rectangle.Top + 80;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, textExp, topLeft, color);
         }
     }
 }

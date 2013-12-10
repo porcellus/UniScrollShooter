@@ -83,7 +83,7 @@ namespace View.Screens
                 hintFont, 
                 new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), 
                 "MODULES", 
-                _pilot.Ship);
+                _pilot);
             _controls.Add(shopModule);
 
             // Button to start the next map.
