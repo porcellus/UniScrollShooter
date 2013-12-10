@@ -22,7 +22,8 @@ namespace Data
             _vx = -0.5;
             _vy = 0;
             Type = type;
-
+            Width = type.Width;
+            Height = type.Height;
             Damage = Type.damage;
         }
         

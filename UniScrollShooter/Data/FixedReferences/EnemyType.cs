@@ -28,11 +28,11 @@ namespace Data.FixedReferences
         //public:
         public static EnemyType Small
         {
-            get { return _small ?? (_small = new EnemyType(5, 4, 10, 70, 100)); }
+            get { return _small ?? (_small = new EnemyType(5, 4, 10, 40, 40)); }
         }
         public static EnemyType Medium
         {
-            get { return _medium ?? (_medium = new EnemyType(10, 10, 20, 200, 200)); }
+            get { return _medium ?? (_medium = new EnemyType(10, 10, 20, 80, 30)); }
         }
         public static EnemyType Big
         {
