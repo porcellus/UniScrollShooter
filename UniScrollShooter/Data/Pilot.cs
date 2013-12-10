@@ -79,7 +79,6 @@ namespace Data
         {
             _ship.DoDamage(x);
         }
-        public BulletKind BulletKind { get { return _ship.bulletKind; } }
 
         public void SetPosition(Double x, Double y)
         {
@@ -140,6 +139,8 @@ namespace Data
         {
             return _ship.GetShipLevel();
         }
+
+        public BulletKind BulletKind { get { return _ship.bulletKind; } }
 
         public Int32 GetBulletLevelofShip()
         {

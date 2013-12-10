@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Data.FixedReferences
 {
     public class StringValueAttribute : System.Attribute
     {
-
         private string _value;
 
         public StringValueAttribute(string value)
@@ -20,7 +20,23 @@ namespace Data.FixedReferences
             get { return _value; }
         }
 
-    }    
+        public static string GetStringValue(Enum value)
+        {
+            string output = null;
+            Type type = value.GetType();
+
+            FieldInfo fi = type.GetField(value.ToString());
+            StringValueAttribute[] attrs =
+                fi.GetCustomAttributes(typeof(StringValueAttribute),
+                                        false) as StringValueAttribute[];
+            if (attrs.Length > 0)
+            {
+                output = attrs[0].Value;
+            }
+          
+            return output;
+        }
+    }      
     
     public enum ModuleKind
     {

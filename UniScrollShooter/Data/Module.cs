@@ -46,7 +46,7 @@ namespace Data
 
         public String Hint()
         {
-            return "Increase the "+_kind.ToString()+" of ship by "+_type.bonus+"% of base value.";
+            return "Increase the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + bonus + "% of base value.";
         }
 
         public Boolean UpgradeModul()
