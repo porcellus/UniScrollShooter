@@ -21,6 +21,8 @@ namespace View.Controls
         private MouseState _state;
         private ButtonStatus _status;
 
+        public SpriteFont HintFont;
+
         public enum ButtonStatus { Up, Down }
 
         public ButtonStatus Status
@@ -42,7 +44,7 @@ namespace View.Controls
                     (int)base.Position.X,
                     (int)base.Position.Y,
                     _texture_buy_off.Width,
-                    _texture_buy_off.Height);
+                    _texture_buy_off.Height + 20);
                 _bounds_buy = new Rectangle(
                     (int)base.Position.X + 450,
                     (int)base.Position.Y,
@@ -60,7 +62,7 @@ namespace View.Controls
                 (int)position.X,
                 (int)position.Y,
                 _texture_buy_off.Width,
-                _texture_buy_off.Height);
+                120);
             _bounds_buy = new Rectangle(
                 (int)position.X + 450,
                 (int)position.Y,
@@ -111,30 +113,40 @@ namespace View.Controls
 
                 if (Font != null)
                 {
-                    DrawText(spriteBatch, Font, _bounds, _module.kind.ToString(), Color);
+                    DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "Upgrade to level " + (_module.size + 1), Color);
+                    DrawHint(spriteBatch, HintFont, _bounds, "Current level:\n    " + _module.Hint(), Color.Yellow);
+                    DrawNextHerald(spriteBatch, HintFont, _bounds, "Next level:\n    " + _module.NextLevelHerald(), Color.LimeGreen);
+                    //DrawText(spriteBatch, Font, _bounds, _module.Hint(), Color);
                 }
             }
         }
 
-        private void DrawText(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        private void DrawKind(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        {
+            var left = rectangle.Left;
+            var top = rectangle.Top;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, text, topLeft, color);
+        }
+
+        private void DrawHint(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
             var size = font.MeasureString(text);
             var textWidth = size.X;
             var textHeight = size.Y;
             var left = rectangle.Left;
-            var top = rectangle.Top + (rectangle.Height - textHeight) / 2;
+            var top = rectangle.Top + 40;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
         }
 
-        private void DrawValue(SpriteBatch batch, SpriteFont font, Rectangle rectangle, int value, Color color)
+        private void DrawNextHerald(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
         {
-            string text = value.ToString();
             var size = font.MeasureString(text);
             var textWidth = size.X;
             var textHeight = size.Y;
-            var left = _bounds_buy.X - textWidth - 20;
-            var top = rectangle.Top + (rectangle.Height - textHeight) / 2;
+            var left = rectangle.Left;
+            var top = rectangle.Top + 80;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
         }

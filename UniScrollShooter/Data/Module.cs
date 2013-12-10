@@ -60,13 +60,13 @@ namespace Data
 
         public String Hint()
         {
-            return "Increase the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + bonus + "% of base value.";
+            return "Increases the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + bonus + "% of base value.";
         }
 
         public String NextLevelHerald()
         {
             if (size < 3)
-                return "The next level will increase " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + GetBonusForNextSize() + "% of base value.";
+                return "Increases the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + GetBonusForNextSize() + "% of base value.";
             else
                 return "Maxed!";
         }

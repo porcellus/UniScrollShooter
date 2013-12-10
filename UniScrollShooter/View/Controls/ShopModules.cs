@@ -33,7 +33,7 @@ namespace View.Controls
             }
         }
 
-        public ShopModules(Texture2D texture, Texture2D texture_buy_off, Texture2D texture_buy_on, SpriteFont font, Vector2 position, string text, Ship ship)
+        public ShopModules(Texture2D texture, Texture2D texture_buy_off, Texture2D texture_buy_on, SpriteFont font, SpriteFont hintFont, Vector2 position, string text, Ship ship)
             : base(position)
         {
             base.Text = text;
@@ -46,19 +46,38 @@ namespace View.Controls
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             _controls = new List<Control>();
 
-            // Teszt control.
-            ModuleControl _testControl = new ModuleControl(
-                _texture_buy_off,
-                _texture_buy_on,
-                new Vector2(base.Position.X + 20, 100),
-                new Module(Data.FixedReferences.ModuleKind.Core));
-            _testControl.Font = this.Font;
-            _testControl.BuyClicked += (sender, args) =>
+            int count = 0;
+            foreach (Module module in _ship.GetModuleList())
             {
-                // Itt majd hozzáadjuk a modult a hajóhoz.
-                // _testControl.Value += 1;
+                ModuleControl _moduleControl = new ModuleControl(
+                    _texture_buy_off,
+                    _texture_buy_on,
+                    new Vector2(base.Position.X + 20, 100 + 120*count),
+                    _ship.GetModuleList()[count]);
+                _moduleControl.Font = Font;
+                _moduleControl.BuyClicked += (sender, args) =>
+                {
+                    //_ship.
+                };
+                _moduleControl.HintFont = hintFont;
+                _controls.Add(_moduleControl);
+                count++;
+            }
+
+            /*
+            ModuleControl _bulletControl = new ModuleControl(
+                    _texture_buy_off,
+                    _texture_buy_on,
+                    new Vector2(base.Position.X + 20, 100 + 50 * count),
+                    _ship.);
+            _bulletControl.Font = this.Font;
+            _bulletControl.BuyClicked += (sender, args) =>
+            {
+                //_ship.
             };
-            _controls.Add(_testControl);
+            _controls.Add(_bulletControl);
+            */
+
         }
 
         public override void UpdateInput(InputState input)

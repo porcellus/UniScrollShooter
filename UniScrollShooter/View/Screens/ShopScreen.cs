@@ -53,6 +53,7 @@ namespace View.Screens
             var texture_minus_off = _content.Load<Texture2D>("minus_off");
             var texture_minus_on = _content.Load<Texture2D>("minus_on");
             var font = _content.Load<SpriteFont>("menufont");
+            var hintFont = _content.Load<SpriteFont>("hintfont1");
 
             int width = texture_button_off.Width / 2;
             int height = texture_button_off.Height / 2;
@@ -78,7 +79,8 @@ namespace View.Screens
                 texture_bg,
                 texture_plus_off, 
                 texture_plus_on,
-                font, 
+                font,
+                hintFont, 
                 new Vector2(fullscreen.Left + 20 + fullscreen.Width / 2, fullscreen.Top + 20), 
                 "MODULES", 
                 _pilot.Ship);
