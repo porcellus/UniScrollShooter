@@ -62,10 +62,12 @@ namespace GameLogic
             CurrState = nState;
             _waitForLevelEnd = false;
 
+            _pilot.SetPosition(Input.InputPos.X, Input.InputPos.Y);
+
             _gameThread = new Thread(GameLoop);
             _gameThread.IsBackground = true;
             _gameThread.Start();
-
+    
             _exiting = 0;
         }
 

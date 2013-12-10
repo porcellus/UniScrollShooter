@@ -220,22 +220,25 @@ namespace View.Screens
             foreach (var star in _stars)
                 spriteBatch.Draw(_starTexture, new Vector2(star.X*fullscreen.Width, star.Y*fullscreen.Height),
                                  Color.White);
-
-            foreach (var enemy in _game.enemies.Where(en => en.PosX > 0 && en.PosY > 0 && en.PosX < fullscreen.Width && en.PosY < fullscreen.Height).ToList())
+            try
             {
-                if(enemy.Type == Data.FixedReferences.EnemyType.Small)
-                    drawCentered(spriteBatch, enemySpSmall, new Vector2((float)enemy.PosX, (float)enemy.PosY));
-                else if (enemy.Type == Data.FixedReferences.EnemyType.Medium)
-                    drawCentered(spriteBatch, enemySpMedium, new Vector2((float)enemy.PosX, (float)enemy.PosY), 0, 1.5f);
-                else if (enemy.Type == Data.FixedReferences.EnemyType.Big)
-                    drawCentered(spriteBatch, enemySpBig, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+
+                foreach (var enemy in _game.enemies.Where(en => en.PosX > 0 && en.PosY > 0 && en.PosX < fullscreen.Width && en.PosY < fullscreen.Height).ToList())
+                {
+                    if (enemy.Type == Data.FixedReferences.EnemyType.Small)
+                        drawCentered(spriteBatch, enemySpSmall, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+                    else if (enemy.Type == Data.FixedReferences.EnemyType.Medium)
+                        drawCentered(spriteBatch, enemySpMedium, new Vector2((float)enemy.PosX, (float)enemy.PosY), 0, 1.5f);
+                    else if (enemy.Type == Data.FixedReferences.EnemyType.Big)
+                        drawCentered(spriteBatch, enemySpBig, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+                }
+
+
+                foreach (var bullet in _game.bullets.Where(bul => bul.PosX > 0 && bul.PosY > 0 && bul.PosX < fullscreen.Width && bul.PosY < fullscreen.Height).ToList())
+                    drawCentered(spriteBatch, lsRedSp, new Vector2((float)bullet.PosX, (float)bullet.PosY),
+                                        bullet.vy > 0 ? (float)bullet.vx / (float)bullet.vy : 0);
             }
-
-
-            foreach (var bullet in _game.bullets.Where(bul => bul.PosX > 0 && bul.PosY > 0 && bul.PosX < fullscreen.Width && bul.PosY < fullscreen.Height).ToList())
-                drawCentered(spriteBatch, lsRedSp, new Vector2((float)bullet.PosX, (float)bullet.PosY),
-                                    bullet.vy > 0 ? (float) bullet.vx / (float) bullet.vy : 0);
-
+            catch { }
             //tulajdonság kiírások (élet, pajzs, tapasztalat, pénz, szint)
             var s = _content.Load<SpriteFont>("menufont");
             spriteBatch.DrawString(s, "Health: " + _game.pilot.Health, new Vector2(viewport.TitleSafeArea.X, viewport.TitleSafeArea.Y), Color.White);
