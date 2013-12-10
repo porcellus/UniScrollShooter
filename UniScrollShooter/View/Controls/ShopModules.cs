@@ -51,7 +51,7 @@ namespace View.Controls
                 _texture_buy_off,
                 _texture_buy_on,
                 new Vector2(base.Position.X + 20, 100),
-                new Module(Data.FixedReferences.ModuleKind.Core, 1));
+                new Module(Data.FixedReferences.ModuleKind.Core));
             _testControl.Font = this.Font;
             _testControl.BuyClicked += (sender, args) =>
             {

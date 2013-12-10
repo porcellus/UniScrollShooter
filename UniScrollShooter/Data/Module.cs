@@ -11,30 +11,64 @@ namespace Data
         //private:
         ModuleType _type;
         private ModuleKind _kind;
+        private Int32 _size;
 
-        //public:
-        public Module(ModuleKind kind, Int32 size)
+        private void SetTypeBySize()
         {
-            _kind = kind;
-            switch (size)
+            switch (_size)
             {
                 case 0:
-                    _type = ModuleType.Small;
+                    _type = null;
                     break;
                 case 1:
-                    _type = ModuleType.Medium;
-                    break;
-                case 2:
-                    _type = ModuleType.Big;
-                    break;
-                default:
                     _type = ModuleType.Small;
                     break;
+                case 2:
+                    _type = ModuleType.Medium;
+                    break;
+                case 3:
+                    _type = ModuleType.Big;
+                    break;
             }
-            
         }
 
-        public Int32 bonus { get { return _type.bonus; } }
+        //public:
+        public Module(ModuleKind kind)
+        {
+            _kind = kind;
+            _size = 0;
+            SetTypeBySize();
+        }
+
+        public Int32 bonus { get { return _size!=0 ? _type.bonus : 0; } }
         public ModuleKind kind { get { return _kind; } }
+        public Int32 size { get { return _size; } }
+
+        public String Hint()
+        {
+            return "Increase the "+_kind.ToString()+" of ship by "+_type.bonus+"% of base value.";
+        }
+
+        public Boolean UpgradeModul()
+        {
+            if (_size < 3)
+            {
+                ++_size;
+                SetTypeBySize();
+                return true;
+            }
+            return false;
+        }
+
+        /*public Boolean DowngradeModul()
+        {
+            if (_size > 0)
+            {
+                --_size;
+                SetSize();
+                return true;
+            }
+            return false;
+        }*/
     }
 }

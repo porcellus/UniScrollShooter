@@ -9,6 +9,7 @@ namespace Data
     public class Pilot
     {
         //private:
+        private Int32 _score;   //toplistához
         private Int32 _exp;
         private Double _expMultiplier;
         private Int32 _money;
@@ -24,6 +25,7 @@ namespace Data
         //public:
         public void Init(double x, double y, Int32 w, Int32 h)
         {
+            _score = 0;
             _exp = 0;
             _expMultiplier = 1;
             _money = 0;
@@ -37,15 +39,17 @@ namespace Data
         //interfész
         public Int32 Exp 
         { 
-            get { return _exp; } 
-            set { _exp = (int)(value*_expMultiplier); } 
+            get { return _exp; }
+            set { _exp = (int)(value * _expMultiplier); _score += (int)(value * _expMultiplier); } 
         }
         
         public Int32 Money
         {
             get { return _money; }
             set { _money = (int)(value * _moneyMultiplier); }
-        }    
+        }
+
+        public Int32 Score { get { return _score; } } 
 
         public Double PosX { get { return _ship.PosX; } }
         public Double PosY { get { return _ship.PosY; } }
@@ -83,7 +87,7 @@ namespace Data
             _ship.PosY = y;
         }
 
-        //pilóta: fejlesztéshez
+        //pilóta: fejlesztéshez, szorzók
         public void IncreaseExpMultiplier(Double x)
         {
             _expMultiplier += x;
@@ -94,12 +98,7 @@ namespace Data
             _moneyMultiplier += x;
         }
         
-        //hajó: fejlesztés elérés
-        public Boolean UpgradeShip()
-        {
-            return _ship.UpgradeShip();
-        }
-
+        //pilóta: fejlesztés
         public void UpgradeShieldOfShip(Int32 x)
         {
             _ship.UpgradeShield(x);
@@ -110,24 +109,46 @@ namespace Data
             _ship.UpgradeHealth(x);
         }
 
-        public void UpgradeBulletOfShip(BulletKind x)
-        {
-            _ship.UpgradeBullet(x);
-        }
-
         public void UpgradeDamageOfShip(Int32 x)
         {
             _ship.UpgradeDamage(x);
         }
 
-        public void AddModuleOfShip(ModuleKind k, Int32 size)
+        //hajó fejlesztés
+        public Boolean UpgradeBulletOfShip()
         {
-            _ship.AddModule(k, size);
+            return _ship.UpgradeBullet();
         }
 
-        public void RemoveModuleOfShip(ModuleKind k)
+        public Boolean UpgradeShip()
         {
-            _ship.RemoveModul(k);
+            return _ship.UpgradeShip();
         }
+
+        public Boolean UpgradeModuleOfShip(ModuleKind k)
+        {
+            return _ship.UpgradeModule(k);
+        }
+
+        //hajó fejlesztés megjelenítés elérése
+        public List<Module> GetModuleListOfShip()
+        {
+            return _ship.GetModuleList();
+        }
+
+        public Int32 GetShipLevel()
+        {
+            return _ship.GetShipLevel();
+        }
+
+        public Int32 GetBulletLevelofShip()
+        {
+            return _ship.GetBulletLevel();
+        }
+
+        /*public void DowngradeModuleOfShip(ModuleKind k)
+        {
+            _ship.DowngradeModule(k);
+        }*/
     }
 }

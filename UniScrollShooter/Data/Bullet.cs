@@ -8,7 +8,7 @@ namespace Data
 {
     public enum BulletKind
     {
-        Laser, Exploded, Rocket
+        Laser = 0, Exploded = 1, Rocket = 2
     }
 
     public sealed class Bullet : ObjectBase

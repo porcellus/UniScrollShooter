@@ -17,7 +17,7 @@ namespace Data
         private BulletKind _bulletkind;
         private Dictionary<ModuleKind, Module> _modules;
 
-        private void CommitModulEffect(ModuleKind k)
+        private void RecalculateModuleEffect(ModuleKind k)
         {
             Module m = _modules[k];
             switch (k)
@@ -34,7 +34,7 @@ namespace Data
             }
         }
         
-        private void RemoveModulEffect(ModuleKind k)
+        private void RemoveModuleEffect(ModuleKind k)
         {
             Module m = _modules[k];
             switch (k)
@@ -62,6 +62,11 @@ namespace Data
             Damage = _type.basedamage;
             _bulletkind = BulletKind.Laser;
             _modules = new Dictionary<ModuleKind, Module>();
+
+            foreach (ModuleKind val in Enum.GetValues(typeof(ModuleKind)))
+            {
+                _modules.Add(val, new Module(val));
+            }
         }
 
         public void DoDamage(int x)
@@ -95,7 +100,6 @@ namespace Data
         public Boolean UpgradeShip()
         {
             //true->sikeres fejlesztés, false->nem az
-            //ha fejlesztek, minden modul elveszik és a tulajdonságok frissül amit Shipekből nyerek
             Damage -= _type.basedamage;
             if (_type.id == 0)
                 _type = ShipType.MediumShip;
@@ -105,11 +109,14 @@ namespace Data
             else return false;
             Damage += _type.basedamage;
 
-            foreach (ModuleKind mk in _modules.Keys)
-                RemoveModulEffect(mk);
-            _modules.Clear();
-            
-            
+            //minden modul vissza 0-ra
+            foreach (ModuleKind val in Enum.GetValues(typeof(ModuleKind)))
+            {
+                RemoveModuleEffect(val);
+                _modules.Remove(val);
+                _modules.Add(val, new Module(val));
+            }
+
             return true;
         }
 
@@ -123,32 +130,58 @@ namespace Data
             Health += x;
         }
 
-        public void UpgradeBullet(BulletKind x)
-        {
-            _bulletkind = x;
-        }
-
         public void UpgradeDamage(Int32 x)
         {
             Damage += x;
         }
 
-        public void AddModule(ModuleKind k, Int32 size)
+        public Boolean UpgradeBullet()
         {
-            RemoveModul(k);
-            _modules.Add(k, new Module(k, size));
-            CommitModulEffect(k);
-        }
-
-        public void RemoveModul(ModuleKind k)
-        {
-            if (_modules.ContainsKey(k))
+            switch (_bulletkind)
             {
-                RemoveModulEffect(k);
-                _modules.Remove(k);
+                case BulletKind.Laser:
+                    _bulletkind = BulletKind.Exploded;
+                    break;
+                case BulletKind.Exploded:
+                    _bulletkind = BulletKind.Rocket;
+                    break;
+                default:
+                    return false;
             }
+            return true;
         }
 
+        public Boolean UpgradeModule(ModuleKind k)
+        {
+            if(_modules[k].UpgradeModul())
+            {
+                RecalculateModuleEffect(k);
+                return true;
+            }
+            return false;
+        }
+
+        /*public void DowngradeModule(ModuleKind k)
+        {
+            RemoveModuleEffect(k);
+            _modules[k].DowngradeModul();
+        }*/
+
+        //modul megjelenítéshez lekérdezés
+        public List<Module> GetModuleList()
+        {
+            return _modules.Values.ToList();
+        }
+
+        public Int32 GetShipLevel()
+        {
+            return _type.id;
+        }
+
+        public Int32 GetBulletLevel()
+        {
+            return (Int32)_bulletkind;
+        }
     }
 
 }
