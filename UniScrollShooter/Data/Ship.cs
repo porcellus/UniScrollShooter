@@ -23,13 +23,13 @@ namespace Data
             switch (k)
             {
                 case ModuleKind.Shield:
-                    _shield += (int)(_shieldDEFAULT * (m.bonus / 100));
+                    _shield += (Int32)(_shieldDEFAULT * ((Double)m.bonus / 100));
                     break;
                 case ModuleKind.Gun:
-                    Damage = (int)(_type.basedamage * (m.bonus / 100));
+                    Damage += (Int32)(_type.basedamage * ((Double)m.bonus / 100));
                     break;
                 case ModuleKind.Core:
-                    Health = (int)(_healthDEFAULT * (m.bonus / 100));
+                    Health += (Int32)(_healthDEFAULT * ((Double)m.bonus / 100));
                     break;
             }
         }
@@ -40,13 +40,13 @@ namespace Data
             switch (k)
             {
                 case ModuleKind.Shield:
-                    _shield -= (int)(_shieldDEFAULT * (m.bonus / 100));
+                    _shield -= (Int32)(_shieldDEFAULT * ((Double)m.bonus / 100));
                     break;
                 case ModuleKind.Gun:
-                    Damage -= (int)(_type.basedamage * (m.bonus / 100));
+                    Damage -= (Int32)(_type.basedamage * ((Double)m.bonus / 100));
                     break;
                 case ModuleKind.Core:
-                    Health -= (int)(_healthDEFAULT * (m.bonus / 100));
+                    Health -= (Int32)(_healthDEFAULT * ((Double)m.bonus / 100));
                     break;
             }
         }

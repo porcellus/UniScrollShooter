@@ -47,9 +47,9 @@ namespace View.Controls
             _controls = new List<Control>();
 
             int count = 0;
-            foreach (Module module in _pilot.Ship.GetModuleList())
+            foreach (Module module in _pilot.GetModuleListOfShip())
             {
-                Module currentModule = _pilot.Ship.GetModuleList()[count];
+                Module currentModule = _pilot.GetModuleListOfShip()[count];
                 ModuleControl _moduleControl = new ModuleControl(
                     _texture_buy_off,
                     _texture_buy_on,
