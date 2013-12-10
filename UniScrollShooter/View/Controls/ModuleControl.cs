@@ -116,6 +116,7 @@ namespace View.Controls
                     DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "Upgrade to level " + (_module.size + 1), Color);
                     DrawHint(spriteBatch, HintFont, _bounds, "Current: level "+_module.size+"\n    " + _module.Hint(), Color.Yellow);
                     DrawNextHerald(spriteBatch, HintFont, _bounds, "Next: level "+_module.size+"\n    " + _module.NextLevelHerald(), Color.LimeGreen);
+                    DrawPrice(spriteBatch, HintFont, _bounds, "Price: " + _module.Price, Color.Aqua);
                 }
             }
         }
@@ -146,6 +147,17 @@ namespace View.Controls
             var textHeight = size.Y;
             var left = rectangle.Left;
             var top = rectangle.Top + 80;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, text, topLeft, color);
+        }
+
+        private void DrawPrice(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
+        {
+            var size = font.MeasureString(text);
+            var textWidth = size.X;
+            var textHeight = size.Y;
+            var left = rectangle.Left;
+            var top = rectangle.Top + 120;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
         }

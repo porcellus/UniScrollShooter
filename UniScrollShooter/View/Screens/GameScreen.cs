@@ -147,12 +147,11 @@ namespace View.Screens
                         ScreenManager.RemoveScreen(this);
                         return;
                     case GameEventType.PlayerDead:
-                        /*
-                        var sFont = _content.Load<SpriteFont>("menufont");
-                        spriteBatch.DrawString(sFont, "GAME OVER", new Vector2(viewport.X + viewport.Width / 2, viewport.Y + viewport.Height / 2), Color.White);
-                         */
-                        ScreenManager.AddScreen(new GameMenu(), ControllingPlayer);
-                        ScreenManager.RemoveScreen(this);
+                        GetPlayerScreen gScreen = new GetPlayerScreen();
+                        gScreen.Score = _game.pilot.Score;
+
+                        ScreenManager.AddScreen(gScreen, ControllingPlayer);
+                        ScreenManager.RemoveScreen(this);   
                         return;
                 }
             }

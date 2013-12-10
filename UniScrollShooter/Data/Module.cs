@@ -12,6 +12,7 @@ namespace Data
         ModuleType _type;
         private ModuleKind _kind;
         private Int32 _size;
+        private int _price;
 
         private void SetTypeBySize()
         {
@@ -58,6 +59,12 @@ namespace Data
         public ModuleKind kind { get { return _kind; } }
         public Int32 size { get { return _size; } }
 
+        public Int32 Price
+        {
+            get { return (_size + 1) * 500; }
+            set { _price = value; }
+        }
+
         public String Hint()
         {
             return "Increases the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + bonus + "% of base value.";
@@ -77,6 +84,7 @@ namespace Data
             {
                 ++_size;
                 SetTypeBySize();
+                Price = (size + 1) * 500;
                 return true;
             }
             return false;

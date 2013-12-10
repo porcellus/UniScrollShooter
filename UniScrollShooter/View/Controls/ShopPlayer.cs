@@ -20,6 +20,7 @@ namespace View.Controls
         private Texture2D _texture_minus_off;
         private Texture2D _texture_minus_on;
         private Pilot _pilot;
+        private SpriteFont _hintFont;
         private List<Control> _controls;
 
         public new Vector2 Position
@@ -33,11 +34,12 @@ namespace View.Controls
             }
         }
 
-        public ShopPlayer(Texture2D texture, Texture2D texture_plus_off, Texture2D texture_plus_on, Texture2D texture_minus_off, Texture2D texture_minus_on, SpriteFont font, Vector2 position, string text, Pilot pilot)
+        public ShopPlayer(Texture2D texture, Texture2D texture_plus_off, Texture2D texture_plus_on, Texture2D texture_minus_off, Texture2D texture_minus_on, SpriteFont font, SpriteFont hintFont, Vector2 position, string text, Pilot pilot)
             : base(position)
         {
             base.Text = text;
             base.Font = font;
+            _hintFont = hintFont;
             _texture = texture;
             _pilot = pilot;
             _bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
@@ -57,6 +59,9 @@ namespace View.Controls
                 "DAMAGE", 
                 _pilot.Damage);
             _damageControl.Font = this.Font;
+            _damageControl.HintFont = hintFont;
+            _damageControl.BuyPrice = DamagePrice(_pilot.Damage);
+            _damageControl.SellPrice = DamagePrice(_pilot.Damage - 1);
             _damageControl.PlusClicked += (sender, args) =>
             {
                 int price = DamagePrice(_pilot.Damage);
@@ -65,6 +70,8 @@ namespace View.Controls
                     _pilot.Damage += 1;
                     _damageControl.Value += 1;
                     _pilot.Exp -= price;
+                    _damageControl.BuyPrice = DamagePrice(_pilot.Damage);
+                    _damageControl.SellPrice = DamagePrice(_pilot.Damage - 1);
                 }
             };
             _damageControl.MinusClicked += (sender, args) =>
@@ -75,6 +82,8 @@ namespace View.Controls
                     _pilot.Damage -= 1;
                     _damageControl.Value -= 1;
                     _pilot.Exp += price;
+                    _damageControl.BuyPrice = DamagePrice(_pilot.Damage);
+                    _damageControl.SellPrice = DamagePrice(_pilot.Damage-1);
                 }
             };
             _controls.Add(_damageControl);
@@ -89,6 +98,9 @@ namespace View.Controls
                 "HEALTH",
                 _pilot.Health);
             _healthControl.Font = this.Font;
+            _healthControl.HintFont = hintFont;
+            _healthControl.BuyPrice = HealthPrice(_pilot.Health);
+            _healthControl.SellPrice = HealthPrice(_pilot.Health - 1);
             _healthControl.PlusClicked += (sender, args) =>
             {
                 int price = HealthPrice(_pilot.Health);
@@ -97,6 +109,8 @@ namespace View.Controls
                     _pilot.Health += 1;
                     _healthControl.Value += 1;
                     _pilot.Exp -= price;
+                    _healthControl.BuyPrice = HealthPrice(_pilot.Health);
+                    _healthControl.SellPrice = HealthPrice(_pilot.Health - 1);
                 }
             };
             _healthControl.MinusClicked += (sender, args) =>
@@ -107,6 +121,8 @@ namespace View.Controls
                     _pilot.Health -= 1;
                     _healthControl.Value -= 1;
                     _pilot.Exp += price;
+                    _healthControl.BuyPrice = HealthPrice(_pilot.Health);
+                    _healthControl.SellPrice = HealthPrice(_pilot.Health - 1);
                 }
             };
             _controls.Add(_healthControl);
@@ -121,6 +137,9 @@ namespace View.Controls
                 "SHIELD",
                 _pilot.Shield);
             _shieldControl.Font = this.Font;
+            _shieldControl.HintFont = hintFont;
+            _shieldControl.BuyPrice = ShieldPrice(_pilot.Health);
+            _shieldControl.SellPrice = ShieldPrice(_pilot.Shield - 1);
             _shieldControl.PlusClicked += (sender, args) =>
             {
                 int price = ShieldPrice(_pilot.Shield);
@@ -129,6 +148,8 @@ namespace View.Controls
                     _pilot.Shield += 1;
                     _shieldControl.Value += 1;
                     _pilot.Exp -= price;
+                    _shieldControl.BuyPrice = ShieldPrice(_pilot.Shield);
+                    _shieldControl.SellPrice = ShieldPrice(_pilot.Shield - 1);
                 }
             };
             _shieldControl.MinusClicked += (sender, args) =>
@@ -139,6 +160,8 @@ namespace View.Controls
                     _pilot.Shield -= 1;
                     _shieldControl.Value -= 1;
                     _pilot.Exp += price;
+                    _shieldControl.BuyPrice = ShieldPrice(_pilot.Shield);
+                    _shieldControl.SellPrice = ShieldPrice(_pilot.Shield - 1);
                 }
             };
             _controls.Add(_shieldControl);

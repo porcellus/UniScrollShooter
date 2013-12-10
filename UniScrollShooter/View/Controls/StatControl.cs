@@ -25,6 +25,10 @@ namespace View.Controls
         private MouseState _state;
         private ButtonStatus _status;
 
+        public Int32 BuyPrice;
+        public Int32 SellPrice;
+        public SpriteFont HintFont;
+
         public enum ButtonStatus { Up, Down }
 
         public string Text
@@ -166,6 +170,8 @@ namespace View.Controls
                 {
                     DrawText(spriteBatch, Font, _bounds, _text, Color);
                     DrawValue(spriteBatch, Font, _bounds, _value, Color);
+                    DrawBuyPrice(spriteBatch, HintFont, _bounds, BuyPrice, Color.Aqua);
+                    DrawSellPrice(spriteBatch, HintFont, _bounds, SellPrice, Color.Aqua);
                 }
             }
         }
@@ -191,6 +197,30 @@ namespace View.Controls
             var top = rectangle.Top + (rectangle.Height - textHeight) / 2;
             var topLeft = new Vector2(left, top);
             batch.DrawString(font, text, topLeft, color);
-        }        
+        }
+
+        private void DrawBuyPrice(SpriteBatch batch, SpriteFont font, Rectangle rectangle, int price, Color color)
+        {
+            string text = "Buy price: " + price.ToString();
+            var size = font.MeasureString(text);
+            var textWidth = size.X;
+            var textHeight = size.Y;
+            var left = rectangle.Left;
+            var top = rectangle.Top + (rectangle.Height - textHeight) / 2 + 24;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, text, topLeft, color);
+        }
+
+        private void DrawSellPrice(SpriteBatch batch, SpriteFont font, Rectangle rectangle, int price, Color color)
+        {
+            string text = "Sell price: " + price.ToString();
+            var size = font.MeasureString(text);
+            var textWidth = size.X;
+            var textHeight = size.Y;
+            var left = rectangle.Left;
+            var top = rectangle.Top + (rectangle.Height - textHeight) / 2 + 40;
+            var topLeft = new Vector2(left, top);
+            batch.DrawString(font, text, topLeft, color);
+        }
     }
 }

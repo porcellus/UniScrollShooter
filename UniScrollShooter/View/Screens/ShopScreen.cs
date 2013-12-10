@@ -68,7 +68,8 @@ namespace View.Screens
                 texture_plus_on, 
                 texture_minus_off, 
                 texture_minus_on, 
-                font, 
+                font,
+                hintFont,
                 new Vector2(fullscreen.Left - 20 + fullscreen.Width / 2 - texture_bg.Width, fullscreen.Top + 20), 
                 "PLAYER STATS", 
                 _pilot);

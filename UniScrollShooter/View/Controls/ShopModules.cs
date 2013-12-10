@@ -53,12 +53,17 @@ namespace View.Controls
                 ModuleControl _moduleControl = new ModuleControl(
                     _texture_buy_off,
                     _texture_buy_on,
-                    new Vector2(base.Position.X + 20, 160 + 120 * count),
+                    new Vector2(base.Position.X + 20, 160 + 140 * count),
                     currentModule);
                 _moduleControl.Font = Font;
                 _moduleControl.BuyClicked += (sender, args) =>
                 {
-                    currentModule.UpgradeModul();
+                    Int32 price = currentModule.Price;
+                    if (_pilot.Money >= price)
+                    {
+                        currentModule.UpgradeModul();
+                        _pilot.Money -= price;
+                    }
                 };
                 _moduleControl.HintFont = hintFont;
                 _controls.Add(_moduleControl);
