@@ -15,6 +15,7 @@ namespace Data
         private Int32 _money;
         private Double _moneyMultiplier;
         private Ship _ship;
+        private Int32 _level;
 
 
 
@@ -26,6 +27,7 @@ namespace Data
             _expMultiplier = 1;
             _money = 0;
             _moneyMultiplier = 1;
+            _level = 1;
 
             _ship = new Ship(w, h);
             _ship.PosX = x;
@@ -147,5 +149,7 @@ namespace Data
         {
             _ship.DowngradeModule(k);
         }*/
+
+        public int level { get { return _level; } set { _level = value; } }
     }
 }

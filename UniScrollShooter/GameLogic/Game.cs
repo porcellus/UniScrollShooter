@@ -49,7 +49,7 @@ namespace GameLogic
             enemies = new List<Enemy>();
             bullets = new List<Bullet>();
 
-            _mapGen = new MapGenerator();
+            _mapGen = new MapGenerator(_pilot.level);
             _mapGen.LevelUp += new EventHandler<EventArgs>(LevelUpHandler);
 
             _cooldown = 0;
@@ -169,10 +169,12 @@ namespace GameLogic
             //pálya vége
             if (enemies.Count == 0 && _waitForLevelEnd)
             {
-                Events.Enqueue(GameEventType.LevelEnd);
+                
+                ++_pilot.level;
                 enemies.Clear();
                 bullets.Clear();
                 _exiting++;
+                Events.Enqueue(GameEventType.LevelEnd);
             }
             
         }

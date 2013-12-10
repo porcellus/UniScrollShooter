@@ -8,7 +8,7 @@ namespace Data
 {
     public class MapGenerator
     {
-        private Int32 _mobcountBase = 140;
+        private Int32 _mobcountBase = 14;
         private Double _timeBase = 750;
         private Dictionary<EnemyType,Double> _probs;
         private Int32 _level;
@@ -16,9 +16,9 @@ namespace Data
         private Int32 _mobsOnLevel;
         public event EventHandler<EventArgs> LevelUp;
 
-        public MapGenerator()
+        public MapGenerator(Int32 level)
         {
-            _level = 1;
+            _level = level;
             _probs = new Dictionary<EnemyType, double>();
             LevelInit();
             _ellapsedTime = 0;
@@ -82,7 +82,6 @@ namespace Data
             }
 
             _ellapsedTime = 0;
-            ++_level;
             LevelInit();
             LevelUp(this, new EventArgs());
             return false;
