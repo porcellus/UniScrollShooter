@@ -113,10 +113,18 @@ namespace View.Controls
 
                 if (Font != null)
                 {
-                    DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "Upgrade to level " + (_module.size + 1), Color);
+                    if (_module.size == 3)
+                        DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "No further upgrades ", Color);
+                    else
+                        DrawKind(spriteBatch, Font, _bounds, _module.kind.ToString() + " - " + "Upgrade to level " + (_module.size + 1), Color);
+
                     DrawHint(spriteBatch, HintFont, _bounds, "Current: level "+_module.size+"\n    " + _module.Hint(), Color.Yellow);
-                    DrawNextHerald(spriteBatch, HintFont, _bounds, "Next: level "+_module.size+"\n    " + _module.NextLevelHerald(), Color.LimeGreen);
-                    DrawPrice(spriteBatch, HintFont, _bounds, "Price: " + _module.Price, Color.Aqua);
+
+                    if (_module.size < 3)
+                    {
+                        DrawNextHerald(spriteBatch, HintFont, _bounds, "Next: level " + (_module.size + 1) + "\n    " + _module.NextLevelHerald(), Color.LimeGreen);
+                        DrawPrice(spriteBatch, HintFont, _bounds, "Price: " + _module.Price, Color.Aqua);
+                    }
                 }
             }
         }
@@ -141,7 +149,7 @@ namespace View.Controls
         }
 
         private void DrawNextHerald(SpriteBatch batch, SpriteFont font, Rectangle rectangle, string text, Color color)
-        {
+        {   
             var size = font.MeasureString(text);
             var textWidth = size.X;
             var textHeight = size.Y;

@@ -59,9 +59,9 @@ namespace View.Controls
                 _moduleControl.BuyClicked += (sender, args) =>
                 {
                     Int32 price = currentModule.Price;
-                    if (_pilot.Money >= price)
+                    if (_pilot.Money >= price && currentModule.size < 3)
                     {
-                        currentModule.UpgradeModul();
+                        _pilot.UpgradeModuleOfShip(currentModule.kind);
                         _pilot.Money -= price;
                     }
                 };
