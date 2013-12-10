@@ -16,11 +16,7 @@ namespace Data
         private Double _moneyMultiplier;
         private Ship _ship;
 
-        public Ship Ship
-        {
-            get { return _ship; }
-            set { _ship = value; }
-        }
+
 
         //public:
         public void Init(double x, double y, Int32 w, Int32 h)
