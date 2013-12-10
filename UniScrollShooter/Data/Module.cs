@@ -32,6 +32,20 @@ namespace Data
             }
         }
 
+        private Int32 GetBonusForNextSize()
+        {
+            switch (_size+1)
+            {
+                case 1:
+                    return ModuleType.Small.bonus;
+                case 2:
+                    return ModuleType.Medium.bonus;
+                case 3:
+                    return ModuleType.Big.bonus;
+                default:
+                    return 0;          
+            }
+        }
         //public:
         public Module(ModuleKind kind)
         {
@@ -47,6 +61,14 @@ namespace Data
         public String Hint()
         {
             return "Increase the " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + bonus + "% of base value.";
+        }
+
+        public String NextLevelHerald()
+        {
+            if (size < 3)
+                return "The next level will increase " + StringValueAttribute.GetStringValue(_kind) + " of ship by " + GetBonusForNextSize() + "% of base value.";
+            else
+                return "Maxed!";
         }
 
         public Boolean UpgradeModul()
