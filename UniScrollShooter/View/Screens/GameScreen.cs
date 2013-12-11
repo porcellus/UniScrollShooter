@@ -42,6 +42,18 @@ namespace View.Screens
         Texture2D _shipTexture;
         private Texture2D _starTexture;
         private List<Vector2> _stars; // a hatterben elrepulo csillagok
+
+        private struct Explosion
+        {
+            public Vector2 pos;
+            public DateTime startTime;
+        }
+
+        private List<Explosion> _explosions;
+        private Texture2D _explosionSprites;
+        private int _explosionSpriteWidth, _explosionSpriteHeight;
+        private double _explosionFrameLength = 1000/25;
+
         private GameLogic.Game _game;
         private Pilot _pilot;
 
@@ -62,6 +74,7 @@ namespace View.Screens
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             _stars = new List<Vector2>();
+            _explosions = new List<Explosion>();
             _pilot = pilot;
         }
 
@@ -88,10 +101,12 @@ namespace View.Screens
                 _stars.Add(new Vector2(rnd.Next(0, 125)/100f, rnd.Next(0, 100)/100f));
             _game.Start();
 
-            _bgMusicList = new List<string> {"Sounds/01"};
-            _bgMusicIndex = 0;
             _shipScale = 1;
             _shipScaleUp = true;
+
+            _bgMusicList = new List<string> {"Sounds/01"};
+            _bgMusicIndex = 0;
+
             /*
             _musicTimer = new Timer(state =>
             {
@@ -101,6 +116,10 @@ namespace View.Screens
                                                                (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
             }, null, 0, (int)_content.Load<SoundEffect>(_bgMusicList[_bgMusicIndex]).Duration.TotalMilliseconds);
              */
+
+            _explosionSprites = _content.Load<Texture2D>("explosion");
+            _explosionSpriteWidth = _explosionSprites.Width/5;
+            _explosionSpriteHeight = _explosionSprites.Height/5;
         }
 
 
@@ -133,16 +152,17 @@ namespace View.Screens
                 _stars.Add(new Vector2(1 + rnd.Next(0, 25) / 100f, rnd.Next(0, 100) / 100f));
             }
 
-            GameEventType ev;
+            KeyValuePair<GameEventType, GameEventData> ev;
             while (_game.Events.TryDequeue(out ev))
             {
-                switch (ev)
+                switch (ev.Key)
                 {
                     case GameEventType.LaserFired:
                         //_content.Load<SoundEffect>("Sounds/laser").Play();
                         break;
                     case GameEventType.EnemyDestroyed:
-                        //_content.Load<SoundEffect>("Sounds/explosion_small").Play();
+                        _content.Load<SoundEffect>("Sounds/explosion_small").Play();
+                        _explosions.Add(new Explosion{pos = ev.Value.pos, startTime = ev.Value.time});
                         break;
                     case GameEventType.LevelEnd:
                         ScreenManager.AddScreen(new ShopScreen(_pilot), ControllingPlayer);
@@ -189,17 +209,16 @@ namespace View.Screens
             }
         }
 
-        private static void drawCentered(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, float rotation = 0, float scale = 1)
+        private static void DrawCentered(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, float rotation = 0, float scale = 1, Rectangle? sourceRectangle = null)
         {
             var cx = texture.Width/2;
             var cy = texture.Height/2;
 
             var cpos = new Vector2(pos.X - cx, pos.Y - cy);
 
-            spriteBatch.Draw(texture, cpos, texture.Bounds, Color.White, rotation, new Vector2(0,0), scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, cpos, sourceRectangle, Color.White, rotation, new Vector2(0, 0), scale, SpriteEffects.None, 0);
         }
 
-        private DateTime _lastDraw;
         private float _shipScale;
         private bool _shipScaleUp;
         
@@ -231,16 +250,22 @@ namespace View.Screens
                 foreach (var enemy in _game.enemies.Where(en => en.PosX > 0 && en.PosY > 0 && en.PosX < fullscreen.Width && en.PosY < fullscreen.Height).ToList())
                 {
                     if (enemy.Type == Data.FixedReferences.EnemyType.Small)
-                        drawCentered(spriteBatch, enemySpSmall, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+                        DrawCentered(spriteBatch, enemySpSmall, new Vector2((float)enemy.PosX, (float)enemy.PosY));
                     else if (enemy.Type == Data.FixedReferences.EnemyType.Medium)
-                        drawCentered(spriteBatch, enemySpMedium, new Vector2((float)enemy.PosX, (float)enemy.PosY), 0, 1.5f);
+                        DrawCentered(spriteBatch, enemySpMedium, new Vector2((float)enemy.PosX, (float)enemy.PosY), 0, 1.5f);
                     else if (enemy.Type == Data.FixedReferences.EnemyType.Big)
-                        drawCentered(spriteBatch, enemySpBig, new Vector2((float)enemy.PosX, (float)enemy.PosY));
+                        DrawCentered(spriteBatch, enemySpBig, new Vector2((float)enemy.PosX, (float)enemy.PosY));
                 }
 
+                foreach (var explosion in _explosions)
+                {
+                    int frame = (int) ((DateTime.Now - explosion.startTime).TotalMilliseconds / _explosionFrameLength);
+                    DrawCentered(spriteBatch, _explosionSprites, explosion.pos, 0, 1.5f, 
+                            new Rectangle((frame%5) * _explosionSpriteWidth, (frame/5) * _explosionSpriteHeight, _explosionSpriteWidth, _explosionSpriteHeight));
+                }
 
                 foreach (var bullet in _game.bullets.Where(bul => bul.PosX > 0 && bul.PosY > 0 && bul.PosX < fullscreen.Width && bul.PosY < fullscreen.Height).ToList())
-                    drawCentered(spriteBatch, lsRedSp, new Vector2((float)bullet.PosX, (float)bullet.PosY),
+                    DrawCentered(spriteBatch, lsRedSp, new Vector2((float)bullet.PosX, (float)bullet.PosY),
                                         bullet.vy > 0 ? (float)bullet.vx / (float)bullet.vy : 0);
             }
             catch { }
@@ -256,7 +281,7 @@ namespace View.Screens
 
             //var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
             //spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
-            drawCentered(spriteBatch, _shipTexture, _game.CurrState.PlayerPosition, 0, _shipScale);
+            DrawCentered(spriteBatch, _shipTexture, _game.CurrState.PlayerPosition, 0, _shipScale);
 
             if (_shipScaleUp) _shipScale += (float) gameTime.ElapsedGameTime.TotalMilliseconds/50000;
             else _shipScale -= (float) gameTime.ElapsedGameTime.TotalMilliseconds/50000;

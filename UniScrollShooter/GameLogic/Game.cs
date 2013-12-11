@@ -16,6 +16,12 @@ namespace GameLogic
         LaserFired, EnemyDestroyed, LevelEnd, PlayerDead
     }
 
+    public struct GameEventData
+    {
+        public DateTime time;
+        public Vector2 pos;
+    }
+
     public struct Input
     {
         public Vector2 InputPos;
@@ -37,7 +43,7 @@ namespace GameLogic
         private bool _paused;
         private MapGenerator _mapGen;
         private Boolean _waitForLevelEnd;
-        public ConcurrentQueue<GameEventType> Events { get; private set; }
+        public ConcurrentQueue<KeyValuePair<GameEventType,GameEventData>> Events { get; private set; }
 
         public Game(Pilot pilot)
         {
@@ -57,7 +63,7 @@ namespace GameLogic
 
             var nState = new GameState {PlayerPosition = new Vector2(5,20)};
 
-            Events = new ConcurrentQueue<GameEventType>();
+            Events = new ConcurrentQueue<KeyValuePair<GameEventType, GameEventData>>();
 
             CurrState = nState;
             _waitForLevelEnd = false;
@@ -104,7 +110,7 @@ namespace GameLogic
                     else if (Input.FirePressed)
                     {
                         CreateNewBullet();
-                        Events.Enqueue(GameEventType.LaserFired);
+                        Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.LaserFired, new GameEventData{ time = DateTime.Now}));
                         _cooldown = 250;
                     }
 
@@ -142,8 +148,9 @@ namespace GameLogic
                 {
                     //akkor kapunk ha lelőttünk egy ellenséget
                     _pilot.Money += enemies[i].value;
+                    Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.EnemyDestroyed, 
+                                new GameEventData { time = DateTime.Now, pos = new Vector2((float) enemies[i].PosX,(float) enemies[i].PosY)}));
                     enemies.RemoveAt(i);
-                    Events.Enqueue(GameEventType.EnemyDestroyed);
                 } else
                 {
                     enemies[i].Move(elapsedTime);
@@ -165,7 +172,7 @@ namespace GameLogic
             {
                 enemies.Clear();
                 bullets.Clear();
-                Events.Enqueue(GameEventType.PlayerDead);
+                Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.PlayerDead, new GameEventData { time = DateTime.Now }));
                 _exiting++;
             }
             //pálya vége
@@ -176,7 +183,7 @@ namespace GameLogic
                 enemies.Clear();
                 bullets.Clear();
                 _exiting++;
-                Events.Enqueue(GameEventType.LevelEnd);
+                Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.LevelEnd, new GameEventData { time = DateTime.Now }));
             }
             
         }
@@ -246,8 +253,8 @@ namespace GameLogic
         private void CreateNewBullet()
         {
             //x,y koordináták(pilot elé teszi), méretei, sebzés mértéke(a pilot hajójából)
-            bullets.Add(new Bullet(_pilot.PosX, _pilot.PosY + _pilot.Height / 2f-12, 65, 21, _pilot.Damage, _pilot.BulletKind));
-            Events.Enqueue(GameEventType.LaserFired);
+            bullets.Add(new Bullet(_pilot.PosX, _pilot.PosY + _pilot.Height / 2f - 12, 65, 21, _pilot.Damage, _pilot.BulletKind));
+            Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.LaserFired, new GameEventData { time = DateTime.Now }));
 
         }
 
