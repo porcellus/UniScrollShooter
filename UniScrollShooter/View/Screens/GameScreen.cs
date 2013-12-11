@@ -90,6 +90,8 @@ namespace View.Screens
 
             _bgMusicList = new List<string> {"Sounds/01"};
             _bgMusicIndex = 0;
+            _shipScale = 1;
+            _shipScaleUp = true;
             /*
             _musicTimer = new Timer(state =>
             {
@@ -197,7 +199,10 @@ namespace View.Screens
             spriteBatch.Draw(texture, cpos, texture.Bounds, Color.White, rotation, new Vector2(0,0), scale, SpriteEffects.None, 0);
         }
 
-        private DateTime lastDraw;
+        private DateTime _lastDraw;
+        private float _shipScale;
+        private bool _shipScaleUp;
+        
 
         /// <summary>
         /// Draws the screen calling every controls Draw.
@@ -248,10 +253,17 @@ namespace View.Screens
             spriteBatch.DrawString(s, "Money: " + _game.pilot.Money, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y + viewport.TitleSafeArea.Height - 40), Color.Gray);
 
             spriteBatch.DrawString(s, "Level: " + _game.level, new Vector2(viewport.TitleSafeArea.X + viewport.TitleSafeArea.Width / 2, viewport.TitleSafeArea.Y), Color.WhiteSmoke);
-            //
 
-            var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
-            spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
+            //var shipCenter = new Vector2(_shipTexture.Width / 2f, _shipTexture.Height / 2f);
+            //spriteBatch.Draw(_shipTexture, _game.CurrState.PlayerPosition - shipCenter, Color.White);
+            drawCentered(spriteBatch, _shipTexture, _game.CurrState.PlayerPosition, 0, _shipScale);
+
+            if (_shipScaleUp) _shipScale += (float) gameTime.ElapsedGameTime.TotalMilliseconds/50000;
+            else _shipScale -= (float) gameTime.ElapsedGameTime.TotalMilliseconds/50000;
+
+            if (_shipScale >= 1.02f) _shipScaleUp = false;
+            else if (_shipScale <= 0.98f) _shipScaleUp = true;
+
             spriteBatch.End();
         }
 
