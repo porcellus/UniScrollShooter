@@ -61,8 +61,6 @@ namespace View.Screens
             int topleftX = fullscreen.Center.X - width;
             int topleftY = fullscreen.Center.Y - 100 - height;
 
-            _pilot.Money = 5000;
-
             // Control to update player.
             var shopPlayer = new Controls.ShopPlayer(
                 texture_bg, 
