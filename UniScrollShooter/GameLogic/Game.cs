@@ -178,12 +178,15 @@ namespace GameLogic
             //pálya vége
             if (enemies.Count == 0 && _waitForLevelEnd)
             {
-                
-                ++_pilot.level;
                 enemies.Clear();
                 bullets.Clear();
                 _exiting++;
-                Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.LevelEnd, new GameEventData { time = DateTime.Now }));
+                if (_pilot.level != 10)
+                {
+                    ++_pilot.level;
+                    Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.LevelEnd, new GameEventData { time = DateTime.Now }));
+                } else
+                    Events.Enqueue(new KeyValuePair<GameEventType, GameEventData>(GameEventType.PlayerDead, new GameEventData { time = DateTime.Now }));
             }
             
         }

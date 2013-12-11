@@ -158,7 +158,7 @@ namespace View.Screens
                 switch (ev.Key)
                 {
                     case GameEventType.LaserFired:
-                        //_content.Load<SoundEffect>("Sounds/laser").Play();
+                        _content.Load<SoundEffect>("Sounds/laser").Play();
                         break;
                     case GameEventType.EnemyDestroyed:
                         _content.Load<SoundEffect>("Sounds/explosion_small").Play();
