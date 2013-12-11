@@ -211,8 +211,8 @@ namespace View.Screens
 
         private static void DrawCentered(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, float rotation = 0, float scale = 1, Rectangle? sourceRectangle = null)
         {
-            var cx = texture.Width/2;
-            var cy = texture.Height/2;
+            var cx = sourceRectangle.HasValue ? sourceRectangle.Value.Width : texture.Width/2;
+            var cy = sourceRectangle.HasValue ? sourceRectangle.Value.Height : texture.Height/2;
 
             var cpos = new Vector2(pos.X - cx, pos.Y - cy);
 
